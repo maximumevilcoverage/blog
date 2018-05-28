@@ -64,6 +64,7 @@ Here's a brief list of terms in descending order of dominance, where c is a cons
 8. log log n
 9. log* n (iterated log)
 10. c
+
 If you plot these on a graph then you can see the asymptotic dominance hierarchy visually. 
 
 As an aside: These notations actually describe sets of functions. For example, O(n) is the set of mathematical functions whose growth is upper-bounded by n. We say that the function f(n) = 2n + 3 belongs to [the set] O(n). It also belongs to O(n^2), O(n^3), O(2^n), O(n!) and so on. Likewise f(n) belongs to Big Omega(sqrt(n)), Big Omega(log n), Big Omega(log log n) and so on. Instead of writing ∈ we sometimes use "=" or "is" instead. This is an abuse of notation but everyone knows what it means so it's ok.
@@ -103,8 +104,8 @@ The ideas of Big O, Big Theta, and Big Omega are orthogonal to the ideas of best
 
 ## Exercises
 
-From Algorithms Unlocked page 16:
-What's the time complexity of linear search with sentinel?
+From Algorithms Unlocked page 16:  
+What's the time complexity of linear search with sentinel?  
 ```python
 def sentinel_linear_search(A,x):
     n = len(A)
@@ -139,7 +140,7 @@ def f(n):
 ```
 Solution: The outer loop executes n times and the inner loop has a worst case of n steps (in case i happens to be the last element of the array), so an upper bound is O(n^2). Can we get any tighter (lower)? Imagine a permutation of 1, 2, 3, ..., n. On that input, the inner loop first tries to find 1, then 2, then 3...and finds it in exactly that many steps. So the number of steps of the inner loop is 1, 2, 3, ..., n. So the total number of steps is 1 + 2 + 3 + ... + n which we know is O(n^2). So n^2 is indeed a tight bound on the worst case running time. 
 
-AHU87 (Data Structures & Algorithms Aho, Hopcraft, Ullman) Example 1.8:  
+AHU87 (Data Structures & Algorithms Aho, Hopcraft, Ullman) Example 1.8:    
 What is the best and worse case time complexity of f?
 ```python
 def f(n):
@@ -224,7 +225,7 @@ The input size is usually the number of bits needed to represent the problem ins
 
 ## Exercises
 
-Example 8 from CTCI 6:  
+Example 8 from CTCI 6:   
 What's the runtime of this algorithm:
 ```
 given an array of strings, sort each string and then sort the full array. 
@@ -234,7 +235,7 @@ Solution:
     The algorithm has 2 stages: first is sorting each string, second is sorting the array. Sorting a string of length s is O(s log s), sorting an array of n elements is O(n log n). First stage is O(n * s log s) altogether, since there are n strings and sorting each string takes O(s log s). Second stage is O(n log n) because sorting requires O(n log n) comparisons, assuming that each comparison operation is O(1). But of course the comparison operation is not O(1) but O(s) because each element is length s. So since there are O(n log n) comparisons and each comparison is O(s), sorting the elements takes O(s * n log n). Add up the 2 stages you get O(n * s log s + s * n log n). Simplify and we get O(s * n * (log s + log n)). 
 
 </span style='color: #ffffff;'>    
-Door in a wall (from Introduction to The Design and Analysis of Algorithms 3rd Edition by Anany Levitin) 
+Door in a wall (from Introduction to The Design and Analysis of Algorithms 3rd Edition by Anany Levitin)    
 You are facing a wall that stretches infinitely in both directions. There is a door in the wall, but you know neither how far away nor in which direction. You can see the door only when you are right next to it. Design an algorithm that enables you to reach the door by walking at most O(n) steps where n is the (unknown to you) number of steps between your initial position and the door.
 Solution: 
 <span style='color: #ffffff;'>
@@ -244,7 +245,7 @@ Solution:
     Thus, it takes O(n) steps to reach any distance n from left or right. Thus the algorithm is O(n) where n is the distance of the door from where you started. 
 
 </span style='color: #ffffff;'>    
-OpenDSA Example 8.8.5:
+OpenDSA Example 8.8.5:   
 What is the time complexity of this algorithm:
 ```python
 for (k=1; k<=n; k*=2)    // Do log n times
@@ -256,19 +257,19 @@ Solution:
     It's O(n). The values of k are 1, 2, 4, ..., n. The inner loop therefore runs 1, 2, 4, ..., n times. So the total number of steps is the geometric progression 1 + 2 + 4 + ... + n, which is O(n). 
 
 </span style='color: #ffffff;'>    
-Example from [Data Structures and Algorithms Solving Recurrence Relations Lecture Notes by Chris Brooks](http://www.cs.cmu.edu/~rweba/algf09/solverecurrencesSF.pdf):
+Example from [Data Structures and Algorithms Solving Recurrence Relations Lecture Notes by Chris Brooks](http://www.cs.cmu.edu/~rweba/algf09/solverecurrencesSF.pdf):   
 What is the time complexity of this algorithm:
 ```python
 for i = 1->n^2:
     for j = 1->i:
         do something in O(1)
 ```
-Solution: 
+Solution:  
 <span style='color: #ffffff;'>
-    We can solve this using substitution. Replace n^2 with k and we get the arithmetic sum 1 + 2 + ... + k = O(k^2). Substitute n^2 back in and we get O((n^2)^2) = O(n^4) which is the answer. 
+We can solve this using substitution. Replace n^2 with k and we get the arithmetic sum 1 + 2 + ... + k = O(k^2). Substitute n^2 back in and we get O((n^2)^2) = O(n^4) which is the answer. 
 
 </span style='color: #ffffff;'>    
-Example 1.23 from Als16 (Design Techniques and Analysis Revised Edition by M. H. Alsuwaiyel):
+Example 1.23 from Als16 (Design Techniques and Analysis Revised Edition by M. H. Alsuwaiyel):  
 What is the time complexity of this algorithm:
 ```python
 def COUNT2(n):
@@ -276,24 +277,24 @@ def COUNT2(n):
         for j = 1->n/i:
             do something in O(1)
 ```
-Solution: 
+Solution:  
 <span style='color: #ffffff;'>
-    The inner loop runs n/1, n/2, n/3, ..., n/n times. Factor out the n and we get the sum: n * (1/1 + 1/2 + 1/3 + ... + 1/n). Notice that the part inside the brackets is just the harmonic series, which is O(log n). Simply multiply that by n to get the time complexity of COUNT2, which is O(n log n). 
+The inner loop runs n/1, n/2, n/3, ..., n/n times. Factor out the n and we get the sum: n * (1/1 + 1/2 + 1/3 + ... + 1/n). Notice that the part inside the brackets is just the harmonic series, which is O(log n). Simply multiply that by n to get the time complexity of COUNT2, which is O(n log n). 
 
 </span style='color: #ffffff;'>    
-Example from KT page 53:
+Example from KT page 53:  
 What is the time complexity of this algorithm, where k is a constant and G is a graph of size n:
 ```python
 For each subgraph S of size k in graph G:
     Check whether S constitutes an independent set 
 ```
-Given that the inner loop takes O(k^2) time (since we have to test if each pair of nodes in S is connected). 
+Given that the inner loop takes O(k^2) time (since we have to test if each pair of nodes in S is connected).   
 Solution: 
 <span style='color: #ffffff;'>
-    Since k is a constant then the inner loop takes O(1) time. There are n choose k = O(n^k) subgraphs in G. So the total running time is O(n^k). 
+Since k is a constant then the inner loop takes O(1) time. There are n choose k = O(n^k) subgraphs in G. So the total running time is O(n^k). 
 
 </span style='color: #ffffff;'>    
-Example 1.26 from Als16:
+Example 1.26 from Als16:   
 What is the time complexity of this algorithm:
 ```python
 def f(n):
@@ -310,7 +311,7 @@ Solution:
     Thus, the algorithm has O(log log n) time complexity. 
 
 </span style='color: #ffffff;'>    
-Example 1.22 from Als16:
+Example 1.22 from Als16:   
 What is the time complexity of this algorithm:
 ```python
 def COUNT1(n):
@@ -321,10 +322,10 @@ def COUNT1(n):
 ```
 Solution: 
 <span style='color: #ffffff;'>
-    We have the series 1^2 + 2^2 + 3^2 + ... + sqrt(n)^2. Actually, we made it more difficult by substituting k with sqrt(n) at this stage. We should leave k as it is: 1^2 + 2^2 + 3^2 + ... + k^2 = O(k^3). Since k = n^0.5, replace k with n^0.5 and you get the answer: O((n^0.5)^3) = O(n^1.5). The trick is to calculate the time complexity first in terms of k and then substitute n for k to get the time complexity in terms of n. 
+We have the series 1^2 + 2^2 + 3^2 + ... + sqrt(n)^2. Actually, we made it more difficult by substituting k with sqrt(n) at this stage. We should leave k as it is: 1^2 + 2^2 + 3^2 + ... + k^2 = O(k^3). Since k = n^0.5, replace k with n^0.5 and you get the answer: O((n^0.5)^3) = O(n^1.5). The trick is to calculate the time complexity first in terms of k and then substitute n for k to get the time complexity in terms of n. 
 
 </span style='color: #ffffff;'>    
-Problem-35 from Kar16 (Data Structures and Algorithms Made Easy: Data Structures and Algorithmic Puzzles, Fifth Edition by Narasimha Karumanchi):
+Problem-35 from Kar16 (Data Structures and Algorithms Made Easy: Data Structures and Algorithmic Puzzles, Fifth Edition by Narasimha Karumanchi):   
 What is the time complexity of this algorithm:
 ```python
 for i = 1->n:
@@ -336,7 +337,7 @@ Solution:
     This is really just a repeat of the earlier Harmonic series problem. First figure out how many times the inner loop runs. When j is increasing by 1 each iteration, it runs n times. When increasing by 2, it runs n/2 times, and so on. So we get the series n + n/2 + n/3 + ... + n/n. Thus the time complexity is the same as COUNT2, which is O(n log n). 
 
 </span style='color: #ffffff;'>    
-Example 3.3 from Manber89 (Introduction to Algorithms by Udi Manber):   
+Example 3.3 from Manber89 (Introduction to Algorithms by Udi Manber):     
 What is the runtime of this algorithm:
 ```python
 def f(n):
@@ -381,7 +382,7 @@ Solution:
 
 Amortized runtime analysis gives the average cost of an operation over a sequence of operations. There are several methods, this one's called aggregate analysis. There's also the accounting method and the potential method, you can find out more in CLRS3 chapter 17.
 
-CLRS3 Example from Figure 17.1:
+CLRS3 Example from Figure 17.1:   
 Suppose you have a stack, each push and pop operation is O(1), and you have this function:
 ```
 def multipop(stack, k):
@@ -397,14 +398,14 @@ In general, a principle that is often used for amortized analysis is that the nu
 
 Note however that if you then add a multipush operation then the analysis no longer holds, since you can then have n multipush operations each costing O(k) and n multipop operations each costing O(k), and the total cost would be O(nk). 
 
-Another example from CTCI6: 
+Another example from CTCI6:   
 In a dynamic array (in C++ called a vector) that doubles itself every time it expands past its limit, you get amortized O(1) insertion cost. 
 
 Every time the vector doubles itself, it has to copy all of its elements to a new memory region. So if you insert n elements, it copies itself when it has 1, 2, 4, 8, 16...elements. So the total cost is n (each normal insert is O(1)) plus 1 + 2 + 4 + 8 + 16 + ... + n (for the insertions when the vector is full). Which is O(n). So inserting n elements takes O(n) time which means the amortized cost of each insert is O(1). 
 
 Funny thing: if the vector automatically halves its capacity, then a sequences of n alternating inserts and deletes at the threshold would be O(n^2) - since every insert causes the vector to double itself and every delete causes the vector to halve itself. That is why in practice, vector implementations usually don't automatically shrink - they just grow forever. 
 
-[Example 2](http://www.cs.cmu.edu/afs/cs/academic/class/15750-s01/www/notes/lect0123): 
+[Example 2](http://www.cs.cmu.edu/afs/cs/academic/class/15750-s01/www/notes/lect0123):   
 Here is an implementation of a queue of size n using 2 stacks A and B of size n:
 ```
 def transfer(): //this reverses a stack
@@ -417,10 +418,10 @@ def dequeue():
     if B is empty: transfer()
     return B.pop()
 ```
-Correctness: We want to show that the dequeue operation always returns the oldest item in the container. There are 2 situations: B is empty or not. If B is empty, we just reverse A into B and pop off the top of B. If B is not empty, then we want to show that the item at the top of B is the oldest. Since A is either emptied or has items added to it, it always maintains the stack property. Since B either has items popped off, or is a reversed version of A, it also holds the reversed stack property - thus, oldest item at top. 
-Efficiency: Whilst enqueue is always O(1), the worst case for a dequeue operation is O(n) because we have to transfer potentially n items from A to B. However, we can show that, given any sequence of n enqueue and dequeue operations, the amortized cost of each operation is O(1). We can do this easily via the aggregate method: each item that is enqueued that is eventually dequeued goes through exactly 2 pushes and 2 pops - 1 push into A, 1 pop off A, 1 push into B, 1 pop off B. Since n items are enqueued and dequeued, that's O(n) total cost, for an amortized cost of O(1) per operation. 
+Correctness: We want to show that the dequeue operation always returns the oldest item in the container. There are 2 situations: B is empty or not. If B is empty, we just reverse A into B and pop off the top of B. If B is not empty, then we want to show that the item at the top of B is the oldest. Since A is either emptied or has items added to it, it always maintains the stack property. Since B either has items popped off, or is a reversed version of A, it also holds the reversed stack property - thus, oldest item at top.   
+Efficiency: Whilst enqueue is always O(1), the worst case for a dequeue operation is O(n) because we have to transfer potentially n items from A to B. However, we can show that, given any sequence of n enqueue and dequeue operations, the amortized cost of each operation is O(1). We can do this easily via the aggregate method: each item that is enqueued that is eventually dequeued goes through exactly 2 pushes and 2 pops - 1 push into A, 1 pop off A, 1 push into B, 1 pop off B. Since n items are enqueued and dequeued, that's O(n) total cost, for an amortized cost of O(1) per operation.  
 
-Example 1.33 from Als16:
+Example 1.33 from Als16:   
 We have a doubly linked list L that initially consists of one node which contains the integer 0. We have as input an array A[1..n] of n positive integers that are to be processed in the following way. If the current integer x is odd, then append x to the list. If it is even, then first append x and then remove all odd elements before x in the list. 
 ```
 def append(x):
@@ -431,13 +432,13 @@ def append(x):
             delete L[-1]
         L.append(x)
 ```
-Given n append operations, what is the time complexity of an append operation? 
-Well, we can consider that in the worst case, L may consist of n elements, all of which are odd. Adding an even element to L would cause all of these n elements to be deleted, so append(x) is O(n) in the worst case. So, we have n append operations, and the worst case for one append operation is O(n), which gives us an upper bound of O(n^2). Is that a tight bound?
+Given n append operations, what is the time complexity of an append operation?   
+Well, we can consider that in the worst case, L may consist of n elements, all of which are odd. Adding an even element to L would cause all of these n elements to be deleted, so append(x) is O(n) in the worst case. So, we have n append operations, and the worst case for one append operation is O(n), which gives us an upper bound of O(n^2). Is that a tight bound?   
 Yes we can. Notice that the while loop must delete one element in each iteration after the first. Therefore, the number of iterations of the while loop in total (minus n) is just the number of elements deleted from the linked list. Since each element can be deleted from L at most once (each is only appended once, so logically they can be at most deleted once), this puts an upper bound on the number of iterations of the while loops at n (with n appends). Thus, the amortized time complexity of append is O(1). 
 
 ## Exercises
 
-CLRS3 page 454 example incrementing a binary counter:
+CLRS3 page 454 example incrementing a binary counter:   
 Given a k-bit binary counter c. Flipping one bit of the counter is O(1). What's the time complexity of incrementing the counter n times? This is the algorithm:
 ```
 def increment():
@@ -448,7 +449,8 @@ def increment():
     if i < len(n):
         c[i] = 1 
 ```
-Solution: Clearly, the worst case for a call to increment flips all the bits (if all the bits are 1) in c, for O(c). A straightforward multiplication gives the worst case for n increments O(nc). Can we get a tighter bound? We can. Notice that the first bit is flipped every increment, whilst the second bit is flipped every 2nd increment, and the 3rd bit is flipped every 4th increment. This is obviously because in order for a bit to flip, it needs the preceding bit to flip from 1 to 0. In other words, a bit at position n flips when the bit at position n-1 has flipped twice. Thus we get the pattern: n + n/2 + n/4 + ... n/2^c, factoring out n you get the geometric series 1 + 1/2 + 1/4 ... which is just 2. So the sum is 2n = O(n). The amortized cost of each increment is therefore O(1). 
+Solution:   
+Clearly, the worst case for a call to increment flips all the bits (if all the bits are 1) in c, for O(c). A straightforward multiplication gives the worst case for n increments O(nc). Can we get a tighter bound? We can. Notice that the first bit is flipped every increment, whilst the second bit is flipped every 2nd increment, and the 3rd bit is flipped every 4th increment. This is obviously because in order for a bit to flip, it needs the preceding bit to flip from 1 to 0. In other words, a bit at position n flips when the bit at position n-1 has flipped twice. Thus we get the pattern: n + n/2 + n/4 + ... n/2^c, factoring out n you get the geometric series 1 + 1/2 + 1/4 ... which is just 2. So the sum is 2n = O(n). The amortized cost of each increment is therefore O(1). 
 
 Note that this analysis only works when you only increment the counter. If you decrement the counter as well then it is trivial to ensure that you always trigger the worst case O(k) repeatedly by incrementing 111..1 to 100..0 and then decrementing it, repeatedly. In that case the amortized cost of both the increment operation and the decrement operation are just the same as the worst case: O(k). 
 
