@@ -1,52 +1,55 @@
 About this series: This nontechnical tutorial series is intended for people who have no mathematical maturity, which is why it contains no mathematical definitions or proofs. If you have mathematical maturity I suggest reading TAOCP instead. The idea here is to focus on gaining intuitive understanding. Once you have gained the intuition you can seek out the proofs later on. I think this way is better for beginners who have a tendency to "miss the forest for the trees" i.e get stuck on the details of proofs. 
 
-- [Algorithmic Analysis](#algorithmic-analysis)
-    - [A word of thanks](#a-word-of-thanks)
-    - [What is algorithmic analysis?](#what-is-algorithmic-analysis)
-    - [Motivation](#motivation)
-    - [The RAM model of computation](#the-ram-model-of-computation)
-    - [Big O Notation](#big-o-notation)
-    - [Best case, average case, and worst case analysis](#best-case--average-case--and-worst-case-analysis)
-            - [Exercises](#exercises)
-        - [Empirical "analysis"](#empirical-analysishttp---cslmuedu-ray-notes-alganalysis)
-        - [Space complexity](#space-complexity)
-        - [Non-recursive algorithms](#non-recursive-algorithms)
-            - [Exercises](#exercises)
-        - [Amortized runtime analysis](#amortized-runtime-analysis)
-            - [Exercises](#exercises)
-        - [Recurrence relations](#recurrence-relations)
+- [Introduction](#introduction)
+- [A word of thanks](#a-word-of-thanks)
+- [What is algorithmic analysis?](#what-is-algorithmic-analysis)
+- [Motivation](#motivation)
+- [The RAM model of computation](#the-ram-model-of-computation)
+- [Big O Notation](#big-o-notation)
+- [Best case, average case, and worst case analysis](#best-case--average-case--and-worst-case-analysis)
+    - [Exercises](#exercises)
+- [Empirical "analysis"](#empirical-analysishttp---cslmuedu-ray-notes-alganalysis)
+- [Space complexity](#space-complexity)
+- [Non-recursive algorithms](#non-recursive-algorithms)
+    - [Exercises](#exercises)
+- [Amortized runtime analysis](#amortized-runtime-analysis)
+    - [Exercises](#exercises)
+- [Recursive algorithms](#recursive-algorithms)
 
-# Algorithmic Analysis
+
+# Introduction
 
 This is cobbled together from a whole bunch of sources. 
 
-Only basic methods are covered, "advanced" methods such as smoothed or competitive analysis are not covered. 
-
 This tutorial only shows very basic applications of the methods introduced here. Later on, we will use some of the methods introduced here to analyze some common algorithms, but each algorithm's analysis will be in the tutorial that covers that algorithm and not here, so this tutorial is not comprehensive in any way shape or form, it's just a basic introduction to some methods and doesn't really even cover how they are used. 
 
-## A word of thanks
+# A word of thanks
 
 The first thing they teach you in any decent CS 101 class is that just about every interesting property of computer programs is uncomputable due to the halting problem (if you can't even determine if a program will ever halt, clearly you can't compute its time complexity) - thanks Turing!
 
-## What is algorithmic analysis? 
+# What is algorithmic analysis? 
 
 Determining the cost (mainly time and space complexity) of algorithms. 
 
 Algorithmic analysis is largely an art. As mentioned earlier there is no general method to determine the time and space complexity of an arbitrary program (because it's uncomputable). For example I could write a program to compute Collatz conjecture and you'd have to solve that conjecture in order to determine the program's time complexity. All we have is a handful of methods that apply to a very small class of programs. Most of the time we can't apply these methods and have to proceed on a case-by-case basis. See also: [full employment theorem](https://en.wikipedia.org/wiki/Full_employment_theorem). 
 
-## Motivation
+# Motivation
 
 All this talk of asymptotic complexity (as if the inputs to our algorithms are really unbounded, even though we live in a finite universe) may seem like intellectual masturbation to you. The truth is, we don't really care about asymptotic complexity for its own sake (except some academics maybe), we care about real world performance, and asymptotic complexity just happens to capture real world performance often enough to be useful. 
 
 In reality, constant factors matter. If the algorithm is mainly going to be running on small inputs - compare Karatsuba and Schönhage–Strassen, the latter has better asymptotic performance but due to high constant factors only runs faster once input size exceeds tens of thousands of digits (this is the so-called **crossover point**, where one algorithm becomes faster than another...there can be multiple crossover points). Ease of implementation also matters. So, asymptotic complexity is not the be-all and end-all in deciding which algorithm to use. It is just one concern out of many. 
 
-## The RAM model of computation
+# The RAM model of computation
 
-There is a nice and concise description of the RAM model of computation in The Algorithm Design Manual by Skiena (page 43). In short, in the RAM model, basic operations (arithmetic, logic, jumps, memory access i.e read & write) are O(1). There are more complicated models that take into account things like cache hierarchy, which is important on real computers. Like all models, the RAM model is a simplification of reality, and you have to know when it is appropriate to use. For example, arithmetic operations are no longer constant time when dealing with really big numbers (e.g from fast growing sequences like Fibonacci or factorial). On the other hand, when comparing algorithms, it is rarely useful to include details from assuming that the basic arithmetic operations are not O(1), e.g if you say hash table lookup is O(log n) because hashing is O(log n) then you have to say binary tree lookup is O(log^2 n) because comparison would also be O(log n) - not enlightening, but it sure does make things more inconvenient. 
+There is a nice and concise description of the RAM model of computation in The Algorithm Design Manual by Skiena (page 43). In short, in the RAM model, basic operations (arithmetic, logic, jumps, memory access i.e read & write) are O(1). The "RA" in RAM stands for "random access" meaning accessing any location in RAM takes O(1) time. This is very important as it is the reason that we can access any element in an array in constant time (as opposed to linear time for a linked list). Note however that in the real world, sequential access (e.g looping through an array) is typically faster than random access (e.g accessing each element in an array in random order) due to hardware optimizations (e.g data prefetching).
 
-## Big O Notation
+There are more complicated models that take into account things like cache hierarchy, which is important on real computers. Like all models, the RAM model is a simplification of reality, and you have to know when it is appropriate to use. For example, arithmetic operations are no longer constant time when dealing with really big numbers (e.g from fast growing sequences like Fibonacci or factorial). On the other hand, when comparing algorithms, it is rarely useful to include details from assuming that the basic arithmetic operations are not O(1), e.g if you say hash table lookup is O(log n) because hashing is O(log n) then you have to say binary tree lookup is O(log^2 n) because comparison would also be O(log n) - not enlightening, but it sure does make things more inconvenient.
+
+# Big O Notation
 
 Big O, Big Theta, and Big Omega are mathematical notations which describe the asymptotic growth rates of mathematical functions (they don't necessarily have anything to do with algorithms). 
+
+As an aside: Big O notation has been in use since the 19th century but Don Knuth proposed it for use in computing in a 1976 ACM SIGACT newsletter ("Big Omicron and big Omega and big Theta").
 
 Big O gives an asymptotic upper bound, Big Omega gives an asymptotic lower bound, and Big Theta is an asymptotically tight bound (the Big Theta of f is both a Big O and a Big Omega of f). Hence, each function can have infinitely many Big Os and Big Omegas but it can only have one (meaningful) Big Theta. Basically, you get the Big Theta of a function by dropping non-dominant terms (i.e everything except the most dominant i.e fastest growing term) and constant factors (do not drop non-constant factors). For precise definitions see CLRS3 page 45. There is also little o and little omega notation (which are rarely used) which are similar: whereas big O is like a >= relation, little o is like a > relation, i.e if f is o(g) then the growth rate of g has to be strictly greater than f. So f(n) = n is O(n) but is NOT o(n), but it is o(n^2). And little omega is just the inverse. For precise definitions see CLRS3 page 50. 
 
@@ -78,9 +81,9 @@ We have the results (for the proofs see KT page 39):
 
 Note that if there are multiple variables, e.g some algorithms take multiple parameters, then in the general case (unless you have special knowledge) you need to keep all the variables - you only drop the non-dominant terms for each variable. For example, f(A,B) = A^2 + A + B^2 + B is O(A^2 + B^2), but if you know that B is always smaller than A then you can simplify that to O(A^2). 
 
-## Best case, average case, and worst case analysis
+# Best case, average case, and worst case analysis
 
-Observe that the runtime of an algorithm depends not only on the size of the input but also on the "content" of the input (e.g is it sorted or not). This is where the ideas of best case, average case, and worst case analysis come from. For example, quicksort takes O(n log n) in the best case and O(n^2) in the worst case (when the input is sorted). Compare with insertion sort which has best case O(n) (when the input is sorted). 
+Observe that the runtime of an algorithm depends not only on the **size** of the input but also on the **content** of the input (e.g is it sorted or not). This is where the ideas of best case, average case, and worst case analysis come in handy. For example, quicksort takes O(n log n) in the best case and O(n^2) in the worst case (when the input is sorted). Compare with insertion sort which has best case O(n) (when the input is sorted). 
 
 Suppose we have this function:
 ```python
@@ -92,13 +95,13 @@ Here the best case time complexity is O(n^2) and worst case is O(n^4).
 
 Usually we care about average case (to get representative idea of the algorithm's performance) and worst case (e.g for safety critical systems, and when the distribution over the inputs may not be known). When we say an algorithm is O(x) we usually are referring to the worst case Big Theta - otherwise we'd qualify with "in the average case". Sometimes the worst case is not reflective of how the algorithm performs on a typical real life input, for example the simplex algorithm is exponential worst case but in practice is polynomial. 
 
-You may perform an average case analysis when you know the distribution of the inputs, in that case the analysis is reflective of reality. However, even if you do not know the distribution of inputs, it may be possible to ensure that the average case analysis almost always applies, for example in randomized algorithms, e.g by randomly permuting the input array - in such a scheme we can minimize the chance (perhaps to negligible) that the randomizer generates a pathological input. For example randomized quicksort is still worst case O(n^2) although that is not representative of how the algorithm performs in practice. 
+You may perform an average case analysis when you know the distribution of the inputs, in that case the analysis is reflective of reality. However, even if you do not know the distribution of inputs, it may be possible to ensure that the average case analysis almost always applies, for example in randomized algorithms, e.g by randomly permuting the input array - in such a scheme we can minimize the chance (perhaps to negligible) that the randomizer generates a pathological input. For example randomized quicksort is still worst case O(n^2) although that does not describe how the algorithm performs in practice. 
 
-As an aside: In computational complexity theory, exponential = slow and polynomial = fast (see theory of NP-completeness). The simplex algorithm shows the former is not true in practice. And many polynomial algorithms are too slow for practical use, for example people don't use the polynomial-time AKS primality test despite it being deterministic because it's too slow, they use the probabilistic tests such as Miller-Rabin instead. For a readable, non-technical, and enlightening discussion of this and related topics, see the 1987 Turing Award lecture by Tarjan (aptly titled "Algorithm Design"). 
+As an aside: In computational complexity theory, exponential = slow/intractable and polynomial = fast/tractable (see theory of NP-completeness). The simplex algorithm shows the former is not true in practice. And many polynomial algorithms are too slow for practical use, for example people don't use the polynomial-time AKS primality test despite it being deterministic because it's too slow, they use the probabilistic tests such as Miller-Rabin instead. For a readable, non-technical, and enlightening discussion of this and related topics, see the 1987 Turing Award lecture by Tarjan (aptly titled "Algorithm Design"). 
 
 The ideas of Big O, Big Theta, and Big Omega are orthogonal to the ideas of best case, average case, and worst case analysis. Big O is used to describe the results of runtime analysis - i.e we say that insertion sort best case runtime is O(n) and worst case runtime is O(n^2). 
 
-#### Exercises
+## Exercises
 
 From Algorithms Unlocked page 16:
 What's the time complexity of linear search with sentinel?
@@ -151,9 +154,9 @@ def h(n)
 ```
 Solution: There are 2 cases: n is even or odd. If n is even then g(n) runs n^4 steps and h(n) runs n^2 steps so it's O(n^4). If n is odd then g(n) runs n^2 times but h(n) runs n^3 steps so it's O(n^3). Therefore best case is O(n^3) and worst case is O(n^4). We say that the steps g(n) and h(n) in f(n) are **incommensurate**: neither is larger than the other, nor are they equal. 
 
-### [Empirical "analysis"](http://cs.lmu.edu/~ray/notes/alganalysis/)
+# [Empirical "analysis"](http://cs.lmu.edu/~ray/notes/alganalysis/)
 
-You can augment a theoretical runtime analysis with an empirical analysis by simply timing the algorithm on inputs of various sizes. Then compare the times to some time complexities. Like this:
+You can augment a theoretical runtime analysis with an empirical analysis by simply timing the algorithm on inputs of various sizes. Then compare the actual time to some known time complexities. Like this:
 ```python
 for i = 0->1000000000:
     t = time f(i) 
@@ -161,11 +164,11 @@ for i = 0->1000000000:
 ```
 This prints out a bunch of ratios. If the ratio gets smaller as the input gets bigger then obviously the algorithm grows faster than that function, and vice versa. If the ratio appears to converge then it's probably the right function or at least very close to it. 
 
-Obviously this method is going to be affected by the characteristics of your platform (hardware, OS etc), but it provides an easy way to roughly estimate the time complexity of your algorithm, as well as providing a sanity check for theoretical analyses. 
+Obviously this method is going to be affected by the characteristics of your platform (hardware, OS etc), but it provides an easy way to roughly estimate the time complexity of your algorithm. 
 
-### Space complexity
+# Space complexity
 
-When talking about space complexity we usually don't include the memory occupied by (reading in) the problem instance itself. That's why you see that some algorithms are said to use O(1) space - they don't use any additional space. 
+When talking about space complexity we usually don't include the memory occupied by (reading in) the problem instance itself. That's why you see that some algorithms are said to use O(1) space. 
 
 There is often a tradeoff between time and space - sometimes you can make an algorithm run faster by using more space (e.g. by using a lookup table), and vice versa. You will also find that making small changes to the requirements can allow you to use significantly faster algorithms - or the opposite. 
 
@@ -179,7 +182,7 @@ int f(n){
 ```
 This takes O(n) time and space because of the recursive calls stack up to a depth of n. 
 
-### Non-recursive algorithms
+# Non-recursive algorithms
 
 In non-nested for loops you just add up the time complexities:
 ```python
@@ -193,17 +196,9 @@ In nested for loops you multiply the time complexities:
 for i = 0 -> a:
     for j = 0 -> b do something in O(1)
 ```
-Here you multiply the for loops, you get O(a*b).
+Here you multiply the for loops, obtaining O(a*b).
 
 For algorithms that multiplicatively reduce the problem space with each step, such as binary search, you can end up with a O(log n) runtime (as in the case of binary search). As it turns out, the base of the log doesn't matter because different log bases only differ by a constant factor. You can look up the change-of-base formula online. 
-
-Recursive functions can have much longer runtimes. E.g
-```python
-def f(n):
-    if (n <= 1) return 1
-    else return f(n-1) + f(n-1)
-```
-Each function call makes 2 additional function calls, so altogether there are 2^(n+1)-1 function calls (draw the call tree to see). Here the base matters because you cannot convert between them with a constant factor. 
 
 Useful things to know (some are from Sedgewick Algorithms 4th): 
 - Arithmetic sum: 1 + 2 + 3 + ... + n is O(n^2)   
@@ -223,28 +218,32 @@ Useful things to know (some are from Sedgewick Algorithms 4th):
 - It takes log n number of digits to represent the number n 
 - (a + b) mod m = ((a mod m) + (b mod m)) mod m
 - (ab) mod m = ((a mod m)(b mod m)) mod m
+- log (n^k) = k log n
 
 The input size is usually the number of bits needed to represent the problem instance. Binary encoding is fine, unary is not. The reason is that in binary it takes log n number of bits to represent a value of n, whereas in unary it takes n bits to represent the value n - exponentially more inefficient. If you want to know more about problem encodings and model of computation (and why it doesn't matter), read any good computational complexity textbook (e.g Sipser page 287, Computational Complexity: A Modern Approach, Papadimitriou). 
 
-Memoization (caching) changes the runtime when you are recalculating the same thing many times. For example the memoized Fibonacci takes only linear time vs the naive recursive Fibonacci which takes exponential time. This is because on each invocation of the function, the function calls go down depth-first, when it reaches the bottom it starts filling up the cache from 0, 1, 2... and on its way back up, instead of branching out it looks in the cache instead. If you draw the call tree for a call to the naive recursive fibonacci function then you'll see the same numbers being recomputed over and over, and the memoization stops that. 
-
-#### Exercises
+## Exercises
 
 Example 8 from CTCI 6:  
 What's the runtime of this algorithm:
 ```
 given an array of strings, sort each string and then sort the full array. 
 ```
-Solution: The algorithm has 2 stages: first is sorting each string, second is sorting the array. Sorting a string of length s is O(s log s), sorting an array of n elements is O(n log n). First stage is O(n * s log s) altogether, since there are n strings and sorting each string takes O(s log s). Second stage is O(n log n) supposing that each comparison operation is O(1). But of course the comparison operation is O(s) because each element is length s. So since there are O(n log n) comparisons and each comparison is O(s), sorting the elements takes O(s * n log n). Add up the 2 stages you get O(n * s log s + s * n log n). Simplify and we get O(s * n * (log s + log n)). 
+Solution: 
+<span style='color: #ffffff;'>
+    The algorithm has 2 stages: first is sorting each string, second is sorting the array. Sorting a string of length s is O(s log s), sorting an array of n elements is O(n log n). First stage is O(n * s log s) altogether, since there are n strings and sorting each string takes O(s log s). Second stage is O(n log n) because sorting requires O(n log n) comparisons, assuming that each comparison operation is O(1). But of course the comparison operation is not O(1) but O(s) because each element is length s. So since there are O(n log n) comparisons and each comparison is O(s), sorting the elements takes O(s * n log n). Add up the 2 stages you get O(n * s log s + s * n log n). Simplify and we get O(s * n * (log s + log n)). 
 
-Door in a wall [From Introduction to The Design and Analysis of Algorithms 3rd Edition by Anany Levitin]
-You are facing a wall that stretches infinitely in both directions. There is a door in the wall, but you know neither how far
-away nor in which direction. You can see the door only when you are right next to it. Design an algorithm that enables you to reach the door by walking at most O(n) steps where n is the (unknown to you) number of steps between your initial position and the door.
-Solution: Go alternately left and right repeatedly until you find the door. First go 1 step left, then 1 step back to origin, then 2 steps right, then 2 steps back to origin, then 4 steps to the left, then 4 steps back to origin, then 8 steps right and so on. Basically, for i=0->infinity, make 2^i steps in one direction, then go back to origin, change direction and repeat. The efficiency is this:
-1 + 1 + 2 + 2 + 4 + 4 + ... + n
-= 2 + 4 + 8 + ... + n = O(n)
-Thus, it takes O(n) steps to reach any distance n from left or right. Thus the algorithm is O(n) where n is the distance of door from origin. 
+</span style='color: #ffffff;'>    
+Door in a wall (from Introduction to The Design and Analysis of Algorithms 3rd Edition by Anany Levitin) 
+You are facing a wall that stretches infinitely in both directions. There is a door in the wall, but you know neither how far away nor in which direction. You can see the door only when you are right next to it. Design an algorithm that enables you to reach the door by walking at most O(n) steps where n is the (unknown to you) number of steps between your initial position and the door.
+Solution: 
+<span style='color: #ffffff;'>
+    Go alternately left and right repeatedly until you find the door. First go 1 step left, then 1 step back to origin, then 2 steps right, then 2 steps back to origin, then 4 steps to the left, then 4 steps back to origin, then 8 steps right and so on. Basically, for i=0->infinity, make 2^i steps in one direction, then go back to origin, change direction and repeat. The overall runtime is:
+    1 + 1 + 2 + 2 + 4 + 4 + ... + n
+    = 2 + 4 + 8 + ... + n = O(n)
+    Thus, it takes O(n) steps to reach any distance n from left or right. Thus the algorithm is O(n) where n is the distance of the door from where you started. 
 
+</span style='color: #ffffff;'>    
 OpenDSA Example 8.8.5:
 What is the time complexity of this algorithm:
 ```python
@@ -252,8 +251,23 @@ for (k=1; k<=n; k*=2)    // Do log n times
    for j = 1->k:  // Do k times
       do something in O(1)
 ```
-Solution: It's O(n). The values of k are 1, 2, 4, ..., n. The inner loop therefore runs 1, 2, 4, ..., n times. So the total number of steps is the geometric progression 1 + 2 + 4 + ... + n, which is O(n). 
+Solution: 
+<span style='color: #ffffff;'>
+    It's O(n). The values of k are 1, 2, 4, ..., n. The inner loop therefore runs 1, 2, 4, ..., n times. So the total number of steps is the geometric progression 1 + 2 + 4 + ... + n, which is O(n). 
 
+</span style='color: #ffffff;'>    
+Example from [Data Structures and Algorithms Solving Recurrence Relations Lecture Notes by Chris Brooks](http://www.cs.cmu.edu/~rweba/algf09/solverecurrencesSF.pdf):
+What is the time complexity of this algorithm:
+```python
+for i = 1->n^2:
+    for j = 1->i:
+        do something in O(1)
+```
+Solution: 
+<span style='color: #ffffff;'>
+    We can solve this using substitution. Replace n^2 with k and we get the arithmetic sum 1 + 2 + ... + k = O(k^2). Substitute n^2 back in and we get O((n^2)^2) = O(n^4) which is the answer. 
+
+</span style='color: #ffffff;'>    
 Example 1.23 from Als16 (Design Techniques and Analysis Revised Edition by M. H. Alsuwaiyel):
 What is the time complexity of this algorithm:
 ```python
@@ -262,8 +276,11 @@ def COUNT2(n):
         for j = 1->n/i:
             do something in O(1)
 ```
-Solution: The inner loop runs n/1, n/2, n/3, ..., n/n times. Factor out the n and we get the sum: n * (1/1 + 1/2 + 1/3 + ... + 1/n). Notice that the part inside the brackets is just the harmonic series, which is O(log n). Simply multiply that by n to get the time complexity of COUNT2, which is O(n log n). 
+Solution: 
+<span style='color: #ffffff;'>
+    The inner loop runs n/1, n/2, n/3, ..., n/n times. Factor out the n and we get the sum: n * (1/1 + 1/2 + 1/3 + ... + 1/n). Notice that the part inside the brackets is just the harmonic series, which is O(log n). Simply multiply that by n to get the time complexity of COUNT2, which is O(n log n). 
 
+</span style='color: #ffffff;'>    
 Example from KT page 53:
 What is the time complexity of this algorithm, where k is a constant and G is a graph of size n:
 ```python
@@ -271,8 +288,11 @@ For each subgraph S of size k in graph G:
     Check whether S constitutes an independent set 
 ```
 Given that the inner loop takes O(k^2) time (since we have to test if each pair of nodes in S is connected). 
-Solution: Since k is a constant then the inner loop takes O(1) time. There are n choose k = O(n^k) subgraphs in G. So the total running time is O(n^k). 
+Solution: 
+<span style='color: #ffffff;'>
+    Since k is a constant then the inner loop takes O(1) time. There are n choose k = O(n^k) subgraphs in G. So the total running time is O(n^k). 
 
+</span style='color: #ffffff;'>    
 Example 1.26 from Als16:
 What is the time complexity of this algorithm:
 ```python
@@ -281,12 +301,15 @@ def f(n):
     while j <= n:
         j *= j     //squaring a number doubles its power
 ```
-Solution: The value of j squares every iteration of the while loop: 2, 4, 16, 256, ..., n. We can rewrite it as follows: 2^1, 2^2, 2^4, 2^8...So we see that the power doubles every iteration. This is a double exponential series. We can write it as: 2^2^0 + 2^2^1 + 2^2^2 + 2^2^3 + ... + 2^2^k, where k is the number of terms in the sequence, which is what we want to find out, as it is the time complexity of the whole algorithm. Now we have:
-2^2^k = n
-2^k = log n
-k = log log n
-Thus, the algorithm has O(log log n) time complexity. 
+Solution: 
+<span style='color: #ffffff;'>
+    The value of j squares every iteration of the while loop: 2, 4, 16, 256, ..., n. We can rewrite it as follows: 2^1, 2^2, 2^4, 2^8...So we see that the power doubles every iteration. This is a double exponential series. We can write it as: 2^2^0 + 2^2^1 + 2^2^2 + 2^2^3 + ... + 2^2^k, where k is the number of terms in the sequence, which is what we want to find out, as it is the time complexity of the whole algorithm. Now we have:
+    2^2^k = n
+    2^k = log n
+    k = log log n
+    Thus, the algorithm has O(log log n) time complexity. 
 
+</span style='color: #ffffff;'>    
 Example 1.22 from Als16:
 What is the time complexity of this algorithm:
 ```python
@@ -296,17 +319,11 @@ def COUNT1(n):
         for j = 1->i^2:
             do something in O(1)
 ```
-Solution: We have the series 1^2 + 2^2 + 3^2 + ... + sqrt(n)^2. Actually, we made life more difficult for ourselves by substituting k with sqrt(n) at this stage. We should have left k as it is: 1^2 + 2^2 + 3^2 + ... + k^2 = O(k^3). Since k = n^0.5, replace k with n^0.5 and you get the answer: O((n^0.5)^3) = O(n^1.5). The trick is to calculate the time complexity first in terms of k and then substitute n for k to get the time complexity in terms of n. 
+Solution: 
+<span style='color: #ffffff;'>
+    We have the series 1^2 + 2^2 + 3^2 + ... + sqrt(n)^2. Actually, we made it more difficult by substituting k with sqrt(n) at this stage. We should leave k as it is: 1^2 + 2^2 + 3^2 + ... + k^2 = O(k^3). Since k = n^0.5, replace k with n^0.5 and you get the answer: O((n^0.5)^3) = O(n^1.5). The trick is to calculate the time complexity first in terms of k and then substitute n for k to get the time complexity in terms of n. 
 
-Example from [Data Structures and Algorithms Solving Recurrence Relations Lecture Notes by Chris Brooks](http://www.cs.cmu.edu/~rweba/algf09/solverecurrencesSF.pdf):
-What is the time complexity of this algorithm:
-```python
-for i = 1->n^2:
-    for j = 1->i:
-        do something in O(1)
-```
-Solution: We can solve this using substitution again. Replace n^2 with k and we get the arithmetic sum 1 + 2 + ... + k = O(k^2). Substitute n^2 back in and we get O((n^2)^2) = O(n^4) which is the answer. 
-
+</span style='color: #ffffff;'>    
 Problem-35 from Kar16 (Data Structures and Algorithms Made Easy: Data Structures and Algorithmic Puzzles, Fifth Edition by Narasimha Karumanchi):
 What is the time complexity of this algorithm:
 ```python
@@ -314,8 +331,11 @@ for i = 1->n:
     for (j = 1; j < n; j += i):
         do something in O(1)
 ```
-Solution: This is really just a repeat of the earlier Harmonic series problem, but to see it you need to first figure out how many times the inner loop runs. When j is increasing by 1 each iteration, it runs n times. When increasing by 2, it runs n/2 times, and so on. So we get the series n + n/2 + n/3 + ... + n/n. Thus the time complexity is the same as COUNT2, which is O(n log n). 
+Solution: 
+<span style='color: #ffffff;'>
+    This is really just a repeat of the earlier Harmonic series problem. First figure out how many times the inner loop runs. When j is increasing by 1 each iteration, it runs n times. When increasing by 2, it runs n/2 times, and so on. So we get the series n + n/2 + n/3 + ... + n/n. Thus the time complexity is the same as COUNT2, which is O(n log n). 
 
+</span style='color: #ffffff;'>    
 Example 3.3 from Manber89 (Introduction to Algorithms by Udi Manber):   
 What is the runtime of this algorithm:
 ```python
@@ -324,14 +344,17 @@ def f(n):
         for j=1->i:
             run 2^i steps
 ```
-Solution: The series is 1 * 2^1 + 2 * 2^2 + 3 * 2^3 + ... + n * 2^n. We apply the technique:
-G = 1 * 2^1 + 2 * 2^2 + 3 * 2^3 + ... + n * 2^n   
-2G = 1 * 2^2 + 2 * 2^3 + 3 * 2^4 + ... + n * 2^(n+1)   
-2G - G = -1 * 2^1 - 1 * 2^2 - 1 * 2^3 - ... - 1 * 2^n + n * 2^(n+1)   
-Apply geometric sum and we get:    
-G = -2^(n+1) + 2 + n * 2^(n+1)   
-= (n-1) * 2^(n+1) + 2   
-= O(n * 2^n)   
+Solution: 
+<span style='color: #ffffff;'>
+    The series is 1 * 2^1 + 2 * 2^2 + 3 * 2^3 + ... + n * 2^n. We apply the technique:
+    G = 1 * 2^1 + 2 * 2^2 + 3 * 2^3 + ... + n * 2^n   
+    2G = 1 * 2^2 + 2 * 2^3 + 3 * 2^4 + ... + n * 2^(n+1)   
+    2G - G = -1 * 2^1 - 1 * 2^2 - 1 * 2^3 - ... - 1 * 2^n + n * 2^(n+1)   
+    Apply geometric sum and we get:    
+    G = -2^(n+1) + 2 + n * 2^(n+1)   
+    = (n-1) * 2^(n+1) + 2   
+    = O(n * 2^n)   
+</span style='color: #ffffff;'>
 
 Example 3.4 from Manber89:    
 What is the runtime of this algorithm:   
@@ -341,16 +364,20 @@ def f(n):
         for j=1->i:
             run 2^(n-i) steps
 ```
-Solution: The series is 1 * 2^(n-1) + 2 * 2^(n-2) + ... + n * 2^(0). Apply the same technique:
-G = 1 * 2^(n-1) + 2 * 2^(n-2) + 3 * 2^(n-3) + ... + n * 2^(0)
-2G = 1 * 2^(n) + 2 * 2^(n-1) + 3 * 2^(n-2) + ... + n * 2^(1)
-2G - G = 1 * 2^(n) + 1 * 2^(n-1) + 1 * 2^(n-2) + ... + 1 * 2^(1) - n * 2^(0)
-Apply geometric sum to get:   
-G = 2^(n+1) - 2 - n * 2^0   
-= 2^(n+1) - n - 2   
-= O(2^n)
+Solution: 
+<span style='color: #ffffff;'>
+    The series is 1 * 2^(n-1) + 2 * 2^(n-2) + ... + n * 2^(0). Apply the same technique:
+    G = 1 * 2^(n-1) + 2 * 2^(n-2) + 3 * 2^(n-3) + ... + n * 2^(0)
+    2G = 1 * 2^(n) + 2 * 2^(n-1) + 3 * 2^(n-2) + ... + n * 2^(1)
+    2G - G = 1 * 2^(n) + 1 * 2^(n-1) + 1 * 2^(n-2) + ... + 1 * 2^(1) - n * 2^(0)
+    Apply geometric sum to get:   
+    G = 2^(n+1) - 2 - n * 2^0   
+    = 2^(n+1) - n - 2   
+    = O(2^n)
+</span style='color: #ffffff;'>
 
-### Amortized runtime analysis
+
+# Amortized runtime analysis
 
 Amortized runtime analysis gives the average cost of an operation over a sequence of operations. There are several methods, this one's called aggregate analysis. There's also the accounting method and the potential method, you can find out more in CLRS3 chapter 17.
 
@@ -408,7 +435,7 @@ Given n append operations, what is the time complexity of an append operation?
 Well, we can consider that in the worst case, L may consist of n elements, all of which are odd. Adding an even element to L would cause all of these n elements to be deleted, so append(x) is O(n) in the worst case. So, we have n append operations, and the worst case for one append operation is O(n), which gives us an upper bound of O(n^2). Is that a tight bound?
 Yes we can. Notice that the while loop must delete one element in each iteration after the first. Therefore, the number of iterations of the while loop in total (minus n) is just the number of elements deleted from the linked list. Since each element can be deleted from L at most once (each is only appended once, so logically they can be at most deleted once), this puts an upper bound on the number of iterations of the while loops at n (with n appends). Thus, the amortized time complexity of append is O(1). 
 
-#### Exercises
+## Exercises
 
 CLRS3 page 454 example incrementing a binary counter:
 Given a k-bit binary counter c. Flipping one bit of the counter is O(1). What's the time complexity of incrementing the counter n times? This is the algorithm:
@@ -425,7 +452,7 @@ Solution: Clearly, the worst case for a call to increment flips all the bits (if
 
 Note that this analysis only works when you only increment the counter. If you decrement the counter as well then it is trivial to ensure that you always trigger the worst case O(k) repeatedly by incrementing 111..1 to 100..0 and then decrementing it, repeatedly. In that case the amortized cost of both the increment operation and the decrement operation are just the same as the worst case: O(k). 
 
-### Recurrence relations
+# Recursive algorithms 
 
 ..to be done..
 
