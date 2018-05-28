@@ -235,6 +235,7 @@ given an array of strings, sort each string and then sort the full array.
   The algorithm has 2 stages: first is sorting each string, second is sorting the array. Sorting a string of length s is O(s log s), sorting an array of n elements is O(n log n). First stage is O(n * s log s) altogether, since there are n strings and sorting each string takes O(s log s). Second stage is O(n log n) because sorting requires O(n log n) comparisons, assuming that each comparison operation is O(1). But of course the comparison operation is not O(1) but O(s) because each element is length s. So since there are O(n log n) comparisons and each comparison is O(s), sorting the elements takes O(s * n log n). Add up the 2 stages you get O(n * s log s + s * n log n). Simplify and we get O(s * n * (log s + log n)). 
 </details>
 
+
 Door in a wall (from Introduction to The Design and Analysis of Algorithms 3rd Edition by Anany Levitin)    
 You are facing a wall that stretches infinitely in both directions. There is a door in the wall, but you know neither how far away nor in which direction. You can see the door only when you are right next to it. Design an algorithm that enables you to reach the door by walking at most O(n) steps where n is the (unknown to you) number of steps between your initial position and the door.
 
@@ -246,6 +247,7 @@ You are facing a wall that stretches infinitely in both directions. There is a d
     Thus, it takes O(n) steps to reach any distance n from left or right. Thus the algorithm is O(n) where n is the distance of the door from where you started. 
 
 </details>
+
 
 OpenDSA Example 8.8.5:   
 What is the time complexity of this algorithm:
