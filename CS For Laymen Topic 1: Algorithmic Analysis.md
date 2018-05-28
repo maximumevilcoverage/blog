@@ -225,7 +225,7 @@ The input size is usually the number of bits needed to represent the problem ins
 
 ## Exercises
 
-Example 8 from CTCI 6:   
+Example 8 from CTCI 6:   </br>
 What's the runtime of this algorithm:
 ```
 given an array of strings, sort each string and then sort the full array. 
@@ -236,7 +236,7 @@ given an array of strings, sort each string and then sort the full array.
 </details>
 </br>
 
-Door in a wall (from Introduction to The Design and Analysis of Algorithms 3rd Edition by Anany Levitin)    
+Door in a wall (from Introduction to The Design and Analysis of Algorithms 3rd Edition by Anany Levitin)    </br>
 You are facing a wall that stretches infinitely in both directions. There is a door in the wall, but you know neither how far away nor in which direction. You can see the door only when you are right next to it. Design an algorithm that enables you to reach the door by walking at most O(n) steps where n is the (unknown to you) number of steps between your initial position and the door.
 
 <details>
@@ -249,31 +249,37 @@ Thus, it takes O(n) steps to reach any distance n from left or right. Thus the a
 </br>
 
 
-OpenDSA Example 8.8.5:   
+OpenDSA Example 8.8.5:   </br>
 What is the time complexity of this algorithm:
 ```python
 for (k=1; k<=n; k*=2)    // Do log n times
    for j = 1->k:  // Do k times
       do something in O(1)
 ```
-Solution: 
-<span style='color: #ffffff;'>
-    It's O(n). The values of k are 1, 2, 4, ..., n. The inner loop therefore runs 1, 2, 4, ..., n times. So the total number of steps is the geometric progression 1 + 2 + 4 + ... + n, which is O(n). 
+<details>
+  <summary>Solution: (Click to expand)</summary>
+      It's O(n). The values of k are 1, 2, 4, ..., n. The inner loop therefore runs 1, 2, 4, ..., n times. So the total number of steps is the geometric progression 1 + 2 + 4 + ... + n, which is O(n). 
 
-</span>    
-Example from [Data Structures and Algorithms Solving Recurrence Relations Lecture Notes by Chris Brooks](http://www.cs.cmu.edu/~rweba/algf09/solverecurrencesSF.pdf):   
+</details>
+</br>
+
+Example from [Data Structures and Algorithms Solving Recurrence Relations Lecture Notes by Chris Brooks](http://www.cs.cmu.edu/~rweba/algf09/solverecurrencesSF.pdf):   </br>
 What is the time complexity of this algorithm:
 ```python
 for i = 1->n^2:
     for j = 1->i:
         do something in O(1)
 ```
-Solution:  
-<span style='color: #ffffff;'>
+
+<details>
+  <summary>Solution: (Click to expand)</summary>
 We can solve this using substitution. Replace n^2 with k and we get the arithmetic sum 1 + 2 + ... + k = O(k^2). Substitute n^2 back in and we get O((n^2)^2) = O(n^4) which is the answer. 
 
-</span>    
-Example 1.23 from Als16 (Design Techniques and Analysis Revised Edition by M. H. Alsuwaiyel):  
+
+</details>
+</br>
+   
+Example 1.23 from Als16 (Design Techniques and Analysis Revised Edition by M. H. Alsuwaiyel):  </br>
 What is the time complexity of this algorithm:
 ```python
 def COUNT2(n):
@@ -281,24 +287,31 @@ def COUNT2(n):
         for j = 1->n/i:
             do something in O(1)
 ```
-Solution:  
-<span style='color: #ffffff;'>
+<details>
+  <summary>Solution: (Click to expand)</summary>
 The inner loop runs n/1, n/2, n/3, ..., n/n times. Factor out the n and we get the sum: n * (1/1 + 1/2 + 1/3 + ... + 1/n). Notice that the part inside the brackets is just the harmonic series, which is O(log n). Simply multiply that by n to get the time complexity of COUNT2, which is O(n log n). 
 
-</span>    
-Example from KT page 53:  
+
+</details>
+</br>
+
+Example from KT page 53:  </br>
 What is the time complexity of this algorithm, where k is a constant and G is a graph of size n:
 ```python
 For each subgraph S of size k in graph G:
     Check whether S constitutes an independent set 
 ```
 Given that the inner loop takes O(k^2) time (since we have to test if each pair of nodes in S is connected).   
-Solution: 
-<span style='color: #ffffff;'>
+
+<details>
+  <summary>Solution: (Click to expand)</summary>
 Since k is a constant then the inner loop takes O(1) time. There are n choose k = O(n^k) subgraphs in G. So the total running time is O(n^k). 
 
-</span>    
-Example 1.26 from Als16:   
+
+</details>
+</br>
+
+Example 1.26 from Als16:   </br>
 What is the time complexity of this algorithm:
 ```python
 def f(n):
@@ -306,16 +319,18 @@ def f(n):
     while j <= n:
         j *= j     //squaring a number doubles its power
 ```
-Solution: 
-<span style='color: #ffffff;'>
-    The value of j squares every iteration of the while loop: 2, 4, 16, 256, ..., n. We can rewrite it as follows: 2^1, 2^2, 2^4, 2^8...So we see that the power doubles every iteration. This is a double exponential series. We can write it as: 2^2^0 + 2^2^1 + 2^2^2 + 2^2^3 + ... + 2^2^k, where k is the number of terms in the sequence, which is what we want to find out, as it is the time complexity of the whole algorithm. Now we have:
-    2^2^k = n
-    2^k = log n
-    k = log log n
+<details>
+  <summary>Solution: (Click to expand)</summary>
+    The value of j squares every iteration of the while loop: 2, 4, 16, 256, ..., n. We can rewrite it as follows: 2^1, 2^2, 2^4, 2^8...So we see that the power doubles every iteration. This is a double exponential series. We can write it as: 2^2^0 + 2^2^1 + 2^2^2 + 2^2^3 + ... + 2^2^k, where k is the number of terms in the sequence, which is what we want to find out, as it is the time complexity of the whole algorithm. Now we have:</br>
+    2^2^k = n</br>
+    2^k = log n</br>
+    k = log log n</br>
     Thus, the algorithm has O(log log n) time complexity. 
 
-</span>    
-Example 1.22 from Als16:   
+</details>
+</br>
+
+Example 1.22 from Als16:   </br>
 What is the time complexity of this algorithm:
 ```python
 def COUNT1(n):
@@ -324,24 +339,32 @@ def COUNT1(n):
         for j = 1->i^2:
             do something in O(1)
 ```
-Solution: 
-<span style='color: #ffffff;'>
+
+<details>
+  <summary>Solution: (Click to expand)</summary>
 We have the series 1^2 + 2^2 + 3^2 + ... + sqrt(n)^2. Actually, we made it more difficult by substituting k with sqrt(n) at this stage. We should leave k as it is: 1^2 + 2^2 + 3^2 + ... + k^2 = O(k^3). Since k = n^0.5, replace k with n^0.5 and you get the answer: O((n^0.5)^3) = O(n^1.5). The trick is to calculate the time complexity first in terms of k and then substitute n for k to get the time complexity in terms of n. 
 
-</span>    
-Problem-35 from Kar16 (Data Structures and Algorithms Made Easy: Data Structures and Algorithmic Puzzles, Fifth Edition by Narasimha Karumanchi):   
+
+</details>
+</br>
+
+Problem-35 from Kar16 (Data Structures and Algorithms Made Easy: Data Structures and Algorithmic Puzzles, Fifth Edition by Narasimha Karumanchi):   </br>
 What is the time complexity of this algorithm:
 ```python
 for i = 1->n:
     for (j = 1; j < n; j += i):
         do something in O(1)
 ```
-Solution: 
-<span style='color: #ffffff;'>
-    This is really just a repeat of the earlier Harmonic series problem. First figure out how many times the inner loop runs. When j is increasing by 1 each iteration, it runs n times. When increasing by 2, it runs n/2 times, and so on. So we get the series n + n/2 + n/3 + ... + n/n. Thus the time complexity is the same as COUNT2, which is O(n log n). 
 
-</span>    
-Example 3.3 from Manber89 (Introduction to Algorithms by Udi Manber):     
+<details>
+  <summary>Solution: (Click to expand)</summary>
+   This is really just a repeat of the earlier Harmonic series problem. First figure out how many times the inner loop runs. When j is increasing by 1 each iteration, it runs n times. When increasing by 2, it runs n/2 times, and so on. So we get the series n + n/2 + n/3 + ... + n/n. Thus the time complexity is the same as COUNT2, which is O(n log n). 
+
+
+</details>
+</br>
+
+Example 3.3 from Manber89 (Introduction to Algorithms by Udi Manber):     </br>
 What is the runtime of this algorithm:
 ```python
 def f(n):
@@ -349,19 +372,22 @@ def f(n):
         for j=1->i:
             run 2^i steps
 ```
-Solution: 
-<span style='color: #ffffff;'>
-    The series is 1 * 2^1 + 2 * 2^2 + 3 * 2^3 + ... + n * 2^n. We apply the technique:
-    G = 1 * 2^1 + 2 * 2^2 + 3 * 2^3 + ... + n * 2^n   
-    2G = 1 * 2^2 + 2 * 2^3 + 3 * 2^4 + ... + n * 2^(n+1)   
-    2G - G = -1 * 2^1 - 1 * 2^2 - 1 * 2^3 - ... - 1 * 2^n + n * 2^(n+1)   
-    Apply geometric sum and we get:    
-    G = -2^(n+1) + 2 + n * 2^(n+1)   
-    = (n-1) * 2^(n+1) + 2   
-    = O(n * 2^n)   
-</span>
 
-Example 3.4 from Manber89:    
+<details>
+  <summary>Solution: (Click to expand)</summary>
+    The series is 1 * 2^1 + 2 * 2^2 + 3 * 2^3 + ... + n * 2^n. We apply the technique:</br>
+    G = 1 * 2^1 + 2 * 2^2 + 3 * 2^3 + ... + n * 2^n   </br>
+    2G = 1 * 2^2 + 2 * 2^3 + 3 * 2^4 + ... + n * 2^(n+1)   </br>
+    2G - G = -1 * 2^1 - 1 * 2^2 - 1 * 2^3 - ... - 1 * 2^n + n * 2^(n+1)   </br>
+    Apply geometric sum and we get:    </br>
+    G = -2^(n+1) + 2 + n * 2^(n+1)   </br>
+    = (n-1) * 2^(n+1) + 2   </br>
+    = O(n * 2^n)   
+
+</details>
+</br>
+
+Example 3.4 from Manber89:    </br>
 What is the runtime of this algorithm:   
 ```python
 def f(n):
@@ -369,17 +395,21 @@ def f(n):
         for j=1->i:
             run 2^(n-i) steps
 ```
-Solution: 
-<span style='color: #ffffff;'>
-    The series is 1 * 2^(n-1) + 2 * 2^(n-2) + ... + n * 2^(0). Apply the same technique:
-    G = 1 * 2^(n-1) + 2 * 2^(n-2) + 3 * 2^(n-3) + ... + n * 2^(0)
-    2G = 1 * 2^(n) + 2 * 2^(n-1) + 3 * 2^(n-2) + ... + n * 2^(1)
-    2G - G = 1 * 2^(n) + 1 * 2^(n-1) + 1 * 2^(n-2) + ... + 1 * 2^(1) - n * 2^(0)
-    Apply geometric sum to get:   
-    G = 2^(n+1) - 2 - n * 2^0   
-    = 2^(n+1) - n - 2   
+
+
+<details>
+  <summary>Solution: (Click to expand)</summary>
+    The series is 1 * 2^(n-1) + 2 * 2^(n-2) + ... + n * 2^(0). Apply the same technique:</br>
+    G = 1 * 2^(n-1) + 2 * 2^(n-2) + 3 * 2^(n-3) + ... + n * 2^(0)</br>
+    2G = 1 * 2^(n) + 2 * 2^(n-1) + 3 * 2^(n-2) + ... + n * 2^(1)</br>
+    2G - G = 1 * 2^(n) + 1 * 2^(n-1) + 1 * 2^(n-2) + ... + 1 * 2^(1) - n * 2^(0)</br>
+    Apply geometric sum to get:   </br>
+    G = 2^(n+1) - 2 - n * 2^0   </br>
+    = 2^(n+1) - n - 2   </br>
     = O(2^n)
-</span>
+
+</details>
+</br>
 
 
 # Amortized runtime analysis
