@@ -234,7 +234,7 @@ Solution:
 <span style='color: #ffffff;'>
 The algorithm has 2 stages: first is sorting each string, second is sorting the array. Sorting a string of length s is O(s log s), sorting an array of n elements is O(n log n). First stage is O(n * s log s) altogether, since there are n strings and sorting each string takes O(s log s). Second stage is O(n log n) because sorting requires O(n log n) comparisons, assuming that each comparison operation is O(1). But of course the comparison operation is not O(1) but O(s) because each element is length s. So since there are O(n log n) comparisons and each comparison is O(s), sorting the elements takes O(s * n log n). Add up the 2 stages you get O(n * s log s + s * n log n). Simplify and we get O(s * n * (log s + log n)). 
 
-</span style='color: #ffffff;'>    
+</span>    
 Door in a wall (from Introduction to The Design and Analysis of Algorithms 3rd Edition by Anany Levitin)    
 You are facing a wall that stretches infinitely in both directions. There is a door in the wall, but you know neither how far away nor in which direction. You can see the door only when you are right next to it. Design an algorithm that enables you to reach the door by walking at most O(n) steps where n is the (unknown to you) number of steps between your initial position and the door.
 Solution: 
@@ -244,7 +244,7 @@ Solution:
     = 2 + 4 + 8 + ... + n = O(n)
     Thus, it takes O(n) steps to reach any distance n from left or right. Thus the algorithm is O(n) where n is the distance of the door from where you started. 
 
-</span style='color: #ffffff;'>    
+</span>    
 OpenDSA Example 8.8.5:   
 What is the time complexity of this algorithm:
 ```python
@@ -256,7 +256,7 @@ Solution:
 <span style='color: #ffffff;'>
     It's O(n). The values of k are 1, 2, 4, ..., n. The inner loop therefore runs 1, 2, 4, ..., n times. So the total number of steps is the geometric progression 1 + 2 + 4 + ... + n, which is O(n). 
 
-</span style='color: #ffffff;'>    
+</span>    
 Example from [Data Structures and Algorithms Solving Recurrence Relations Lecture Notes by Chris Brooks](http://www.cs.cmu.edu/~rweba/algf09/solverecurrencesSF.pdf):   
 What is the time complexity of this algorithm:
 ```python
@@ -268,7 +268,7 @@ Solution:
 <span style='color: #ffffff;'>
 We can solve this using substitution. Replace n^2 with k and we get the arithmetic sum 1 + 2 + ... + k = O(k^2). Substitute n^2 back in and we get O((n^2)^2) = O(n^4) which is the answer. 
 
-</span style='color: #ffffff;'>    
+</span>    
 Example 1.23 from Als16 (Design Techniques and Analysis Revised Edition by M. H. Alsuwaiyel):  
 What is the time complexity of this algorithm:
 ```python
@@ -281,7 +281,7 @@ Solution:
 <span style='color: #ffffff;'>
 The inner loop runs n/1, n/2, n/3, ..., n/n times. Factor out the n and we get the sum: n * (1/1 + 1/2 + 1/3 + ... + 1/n). Notice that the part inside the brackets is just the harmonic series, which is O(log n). Simply multiply that by n to get the time complexity of COUNT2, which is O(n log n). 
 
-</span style='color: #ffffff;'>    
+</span>    
 Example from KT page 53:  
 What is the time complexity of this algorithm, where k is a constant and G is a graph of size n:
 ```python
@@ -293,7 +293,7 @@ Solution:
 <span style='color: #ffffff;'>
 Since k is a constant then the inner loop takes O(1) time. There are n choose k = O(n^k) subgraphs in G. So the total running time is O(n^k). 
 
-</span style='color: #ffffff;'>    
+</span>    
 Example 1.26 from Als16:   
 What is the time complexity of this algorithm:
 ```python
@@ -310,7 +310,7 @@ Solution:
     k = log log n
     Thus, the algorithm has O(log log n) time complexity. 
 
-</span style='color: #ffffff;'>    
+</span>    
 Example 1.22 from Als16:   
 What is the time complexity of this algorithm:
 ```python
@@ -324,7 +324,7 @@ Solution:
 <span style='color: #ffffff;'>
 We have the series 1^2 + 2^2 + 3^2 + ... + sqrt(n)^2. Actually, we made it more difficult by substituting k with sqrt(n) at this stage. We should leave k as it is: 1^2 + 2^2 + 3^2 + ... + k^2 = O(k^3). Since k = n^0.5, replace k with n^0.5 and you get the answer: O((n^0.5)^3) = O(n^1.5). The trick is to calculate the time complexity first in terms of k and then substitute n for k to get the time complexity in terms of n. 
 
-</span style='color: #ffffff;'>    
+</span>    
 Problem-35 from Kar16 (Data Structures and Algorithms Made Easy: Data Structures and Algorithmic Puzzles, Fifth Edition by Narasimha Karumanchi):   
 What is the time complexity of this algorithm:
 ```python
@@ -336,7 +336,7 @@ Solution:
 <span style='color: #ffffff;'>
     This is really just a repeat of the earlier Harmonic series problem. First figure out how many times the inner loop runs. When j is increasing by 1 each iteration, it runs n times. When increasing by 2, it runs n/2 times, and so on. So we get the series n + n/2 + n/3 + ... + n/n. Thus the time complexity is the same as COUNT2, which is O(n log n). 
 
-</span style='color: #ffffff;'>    
+</span>    
 Example 3.3 from Manber89 (Introduction to Algorithms by Udi Manber):     
 What is the runtime of this algorithm:
 ```python
@@ -355,7 +355,7 @@ Solution:
     G = -2^(n+1) + 2 + n * 2^(n+1)   
     = (n-1) * 2^(n+1) + 2   
     = O(n * 2^n)   
-</span style='color: #ffffff;'>
+</span>
 
 Example 3.4 from Manber89:    
 What is the runtime of this algorithm:   
@@ -375,7 +375,7 @@ Solution:
     G = 2^(n+1) - 2 - n * 2^0   
     = 2^(n+1) - n - 2   
     = O(2^n)
-</span style='color: #ffffff;'>
+</span>
 
 
 # Amortized runtime analysis
