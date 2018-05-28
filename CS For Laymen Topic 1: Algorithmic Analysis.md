@@ -7,13 +7,13 @@ About this series: This nontechnical tutorial series is intended for people who 
 - [The RAM model of computation](#the-ram-model-of-computation)
 - [Big O Notation](#big-o-notation)
 - [Best case, average case, and worst case analysis](#best-case--average-case--and-worst-case-analysis)
-    - [Exercises](#exercises)
+    - [Exercises 1](#exercises-1)
 - [Empirical "analysis"](#empirical-analysishttp---cslmuedu-ray-notes-alganalysis)
 - [Space complexity](#space-complexity)
 - [Non-recursive algorithms](#non-recursive-algorithms)
-    - [Exercises](#exercises)
+    - [Exercises 2](#exercises-2)
 - [Amortized runtime analysis](#amortized-runtime-analysis)
-    - [Exercises](#exercises)
+    - [Exercises 3](#exercises-3)
 - [Recursive algorithms](#recursive-algorithms)
 
 
@@ -102,7 +102,7 @@ As an aside: In computational complexity theory, exponential = slow/intractable 
 
 The ideas of Big O, Big Theta, and Big Omega are orthogonal to the ideas of best case, average case, and worst case analysis. Big O is used to describe the results of runtime analysis - i.e we say that insertion sort best case runtime is O(n) and worst case runtime is O(n^2). 
 
-## Exercises
+## Exercises 1
 
 From Algorithms Unlocked page 16:  
 What's the time complexity of linear search with sentinel?  
@@ -223,7 +223,7 @@ Useful things to know (some are from Sedgewick Algorithms 4th):
 
 The input size is usually the number of bits needed to represent the problem instance. Binary encoding is fine, unary is not. The reason is that in binary it takes log n number of bits to represent a value of n, whereas in unary it takes n bits to represent the value n - exponentially more inefficient. If you want to know more about problem encodings and model of computation (and why it doesn't matter), read any good computational complexity textbook (e.g Sipser page 287, Computational Complexity: A Modern Approach, Papadimitriou). 
 
-## Exercises
+## Exercises 2
 
 Example 8 from CTCI 6:   </br>
 What's the runtime of this algorithm:
@@ -470,7 +470,7 @@ Given n append operations, what is the time complexity of an append operation?
 Well, we can consider that in the worst case, L may consist of n elements, all of which are odd. Adding an even element to L would cause all of these n elements to be deleted, so append(x) is O(n) in the worst case. So, we have n append operations, and the worst case for one append operation is O(n), which gives us an upper bound of O(n^2). Is that a tight bound?   
 Yes we can. Notice that the while loop must delete one element in each iteration after the first. Therefore, the number of iterations of the while loop in total (minus n) is just the number of elements deleted from the linked list. Since each element can be deleted from L at most once (each is only appended once, so logically they can be at most deleted once), this puts an upper bound on the number of iterations of the while loops at n (with n appends). Thus, the amortized time complexity of append is O(1). 
 
-## Exercises
+## Exercises 3
 
 CLRS3 page 454 example incrementing a binary counter:   
 Given a k-bit binary counter c. Flipping one bit of the counter is O(1). What's the time complexity of incrementing the counter n times? This is the algorithm:
