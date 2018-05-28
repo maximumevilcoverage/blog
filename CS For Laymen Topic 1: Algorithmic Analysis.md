@@ -241,9 +241,9 @@ You are facing a wall that stretches infinitely in both directions. There is a d
 
 <details>
   <summary>Solution: (Click to expand)</summary>
-Go alternately left and right repeatedly until you find the door. First go 1 step left, then 1 step back to origin, then 2 steps right, then 2 steps back to origin, then 4 steps to the left, then 4 steps back to origin, then 8 steps right and so on. Basically, for i=0->infinity, make 2^i steps in one direction, then go back to origin, change direction and repeat. The overall runtime is:    \
-1 + 1 + 2 + 2 + 4 + 4 + ... + n    \
-= 2 + 4 + 8 + ... + n = O(n)    \
+Go alternately left and right repeatedly until you find the door. First go 1 step left, then 1 step back to origin, then 2 steps right, then 2 steps back to origin, then 4 steps to the left, then 4 steps back to origin, then 8 steps right and so on. Basically, for i=0->infinity, make 2^i steps in one direction, then go back to origin, change direction and repeat. The overall runtime is:    </br>
+1 + 1 + 2 + 2 + 4 + 4 + ... + n    </br>
+= 2 + 4 + 8 + ... + n = O(n)    </br>
 Thus, it takes O(n) steps to reach any distance n from left or right. Thus the algorithm is O(n) where n is the distance of the door from where you started.     
 </details>
 </br>
