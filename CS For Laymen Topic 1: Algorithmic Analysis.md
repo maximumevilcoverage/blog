@@ -6,6 +6,7 @@ About this series: This nontechnical tutorial series is intended for people who 
 - [Motivation](#motivation)
 - [The RAM model of computation](#the-ram-model-of-computation)
 - [Big O Notation](#big-o-notation)
+    - [Exercises 0](#exercises-0)
 - [Best case, average case, and worst case analysis](#best-case-average-case-and-worst-case-analysis)
     - [Exercises 1](#exercises-1)
 - [Empirical "analysis"](#empirical-%22analysis%22)
@@ -97,6 +98,12 @@ For competitive programming tasks you are normally given the input range, and th
 | O(N!)      |          11 |
 +------------+-------------+
 ```
+
+## Exercises 0
+
+Question: Do the functions f = log (n ^ (log 2)) and g = log (2 ^ (log n)) have the same asymptotic growth rate? 
+
+Solution: Yes because log a^b = b log a. So f = log 2 log n and g = log n log 2. They're the same. 
 
 # Best case, average case, and worst case analysis
 
