@@ -6,9 +6,9 @@ About this series: This nontechnical tutorial series is intended for people who 
 - [Motivation](#motivation)
 - [The RAM model of computation](#the-ram-model-of-computation)
 - [Big O Notation](#big-o-notation)
-- [Best case, average case, and worst case analysis](#best-case--average-case--and-worst-case-analysis)
+- [Best case, average case, and worst case analysis](#best-case-average-case-and-worst-case-analysis)
     - [Exercises 1](#exercises-1)
-- [Empirical "analysis"](#empirical-analysishttp---cslmuedu-ray-notes-alganalysis)
+- [Empirical "analysis"](#empirical-%22analysis%22)
 - [Space complexity](#space-complexity)
 - [Non-recursive algorithms](#non-recursive-algorithms)
     - [Exercises 2](#exercises-2)
@@ -47,11 +47,11 @@ There are more complicated models that take into account things like cache hiera
 
 # Big O Notation
 
-Big O, Big Theta, and Big Omega are mathematical notations which describe the asymptotic growth rates of mathematical functions (they don't necessarily have anything to do with algorithms). 
+Big O, Big Theta, and Big Omega are mathematical notations which describe the **asymptotic** growth rates of mathematical functions (they don't necessarily have anything to do with algorithms). Things like "the number of positions in chess" is constant, so an algorithm visiting every possible position in chess is O(1). 
 
 As an aside: Big O notation has been in use since the 19th century but Don Knuth proposed it for use in computing in a 1976 ACM SIGACT newsletter ("Big Omicron and big Omega and big Theta").
 
-Big O gives an asymptotic upper bound, Big Omega gives an asymptotic lower bound, and Big Theta is an asymptotically tight bound (the Big Theta of f is both a Big O and a Big Omega of f). Hence, each function can have infinitely many Big Os and Big Omegas but it can only have one (meaningful) Big Theta. Basically, you get the Big Theta of a function by dropping non-dominant terms (i.e everything except the most dominant i.e fastest growing term) and constant factors (do not drop non-constant factors). For precise definitions see CLRS3 page 45. There is also little o and little omega notation (which are rarely used) which are similar: whereas big O is like a >= relation, little o is like a > relation, i.e if f is o(g) then the growth rate of g has to be strictly greater than f. So f(n) = n is O(n) but is NOT o(n), but it is o(n^2). And little omega is just the inverse. For precise definitions see CLRS3 page 50. 
+Big O gives an asymptotic upper bound, Big Omega gives an asymptotic lower bound, and Big Theta is an asymptotically tight bound (the Big Theta of f is both a Big O and a Big Omega of f). Hence, each function can have infinitely many Big Os and Big Omegas but it can only have one (meaningful) Big Theta. Basically, you get the Big Theta of a function by dropping non-dominant terms (i.e everything except the most dominant i.e fastest growing term) and constant factors (do not drop non-constant factors). For precise definitions see CLRS3 page 45. There is also little o and little omega notation (which are rarely used) which are similar: whereas big O is like a >= relation, little o is like a > relation, i.e if f is o(g) then it means f grows strictly slower than g. So f(n) = n is O(n) but is NOT o(n), but it is o(n^2). And little omega is just the inverse. For precise definitions see CLRS3 page 50. 
 
 Here's a brief list of terms in descending order of dominance, where c is a constant:
 1. infinity
@@ -67,7 +67,7 @@ Here's a brief list of terms in descending order of dominance, where c is a cons
 
 If you plot these on a graph then you can see the asymptotic dominance hierarchy visually. 
 
-As an aside: These notations actually describe sets of functions. For example, O(n) is the set of mathematical functions whose growth is upper-bounded by n. We say that the function f(n) = 2n + 3 belongs to [the set] O(n). It also belongs to O(n^2), O(n^3), O(2^n), O(n!) and so on. Likewise f(n) belongs to Big Omega(sqrt(n)), Big Omega(log n), Big Omega(log log n) and so on. Instead of writing ∈ we sometimes use "=" or "is" instead. This is an abuse of notation but everyone knows what it means so it's ok.
+As an aside: These notations describe sets of functions. For example, O(n) is the set of mathematical functions whose growth is upper-bounded by n. We say that the function f(n) = 2n + 3 belongs to [the set] O(n). It also belongs to O(n^2), O(n^3), O(2^n), O(n!) and so on. Likewise f(n) belongs to Big Omega(sqrt(n)), Big Omega(log n), Big Omega(log log n) and so on. Instead of writing ∈ we sometimes use "=" or "is" instead. This is an abuse of notation but everyone knows what it means so it's ok.
 
 As an aside: In fact, the thing inside the parentheses of the Big Oh is an anonymous function, so we should use lambda notation: i.e we should really say f ∈ O(λn.n^3) instead of f ∈ O(n^3). Nobody does that though, it's just inconvenient. 
 
@@ -82,6 +82,22 @@ We have the results (for the proofs see KT page 39):
 
 Note that if there are multiple variables, e.g some algorithms take multiple parameters, then in the general case (unless you have special knowledge) you need to keep all the variables - you only drop the non-dominant terms for each variable. For example, f(A,B) = A^2 + A + B^2 + B is O(A^2 + B^2), but if you know that B is always smaller than A then you can simplify that to O(A^2). 
 
+For competitive programming tasks you are normally given the input range, and that will suggest the maximum time complexity of the algorithm [you can use (since the time limit is only a few seconds)](https://web.archive.org/web/20170224221329/https://www.topcoder.com/community/data-science/data-science-tutorials/computational-complexity-section-1/):
+```
++------------+-------------+
+| complexity |  maximum N  |
++------------+-------------+
+| O(log N)   |       10^18 |
+| O(N)       | 100 000 000 |
+| O(N log N) |  40 000 000 |
+| O(N^2)     |      10 000 |
+| O(N^3)     |         500 |
+| O(N^4)     |          90 |
+| O(2^N)     |          20 |
+| O(N!)      |          11 |
++------------+-------------+
+```
+
 # Best case, average case, and worst case analysis
 
 Observe that the runtime of an algorithm depends not only on the **size** of the input but also on the **content** of the input (e.g is it sorted or not). This is where the ideas of best case, average case, and worst case analysis come in handy. For example, quicksort takes O(n log n) in the best case and O(n^2) in the worst case (when the input is sorted). Compare with insertion sort which has best case O(n) (when the input is sorted). 
@@ -94,13 +110,13 @@ def f(n):
 ```
 Here the best case time complexity is O(n^2) and worst case is O(n^4). 
 
-Usually we care about average case (to get representative idea of the algorithm's performance) and worst case (e.g for safety critical systems, and when the distribution over the inputs may not be known). When we say an algorithm is O(x) we usually are referring to the worst case Big Theta - otherwise we'd qualify with "in the average case". Sometimes the worst case is not reflective of how the algorithm performs on a typical real life input, for example the simplex algorithm is exponential worst case but in practice is polynomial. 
+The ideas of Big O, Big Theta, and Big Omega are orthogonal to the ideas of best case, average case, and worst case analysis. Big O is used to describe the results of runtime analysis - i.e we say that insertion sort best case runtime is O(n) and worst case runtime is O(n^2). However, it would also be correct to just say that insertion sort is O(n^2) since that is true for both best and worst case. So if an algorithm has different best and worst case time complexities you can still use just one Big Oh to describe it (the asymptotic time complexity of the algorithm in the worst case) but you can't use one Big Theta to describe its running time since its Big Thetas would be different for best and worst case inputs. Thus when people say an algorithm is O(x) that usually means its the worst case Big Theta is x - otherwise they would have clarified whether they're talking about the best or worst or average case and use Big Theta notation instead. 
+
+Usually we care about average case (to get representative idea of the algorithm's performance) and worst case (e.g for safety critical systems, and when the distribution over the inputs may not be known). Best case is usually pretty useless since it's fairly easy to check if the input is best case and just return something trivial. Sometimes the worst case is not reflective of how the algorithm performs on a typical real life input, for example the simplex algorithm is exponential worst case but in practice is polynomial. 
 
 You may perform an average case analysis when you know the distribution of the inputs, in that case the analysis is reflective of reality. However, even if you do not know the distribution of inputs, it may be possible to ensure that the average case analysis almost always applies, for example in randomized algorithms, e.g by randomly permuting the input array - in such a scheme we can minimize the chance (perhaps to negligible) that the randomizer generates a pathological input. For example randomized quicksort is still worst case O(n^2) although that does not describe how the algorithm performs in practice. 
 
 As an aside: In computational complexity theory, exponential = slow/intractable and polynomial = fast/tractable (see theory of NP-completeness). The simplex algorithm shows the former is not true in practice. And many polynomial algorithms are too slow for practical use, for example people don't use the polynomial-time AKS primality test despite it being deterministic because it's too slow, they use the probabilistic tests such as Miller-Rabin instead. For a readable, non-technical, and enlightening discussion of this and related topics, see the 1987 Turing Award lecture by Tarjan (aptly titled "Algorithm Design"). 
-
-The ideas of Big O, Big Theta, and Big Omega are orthogonal to the ideas of best case, average case, and worst case analysis. Big O is used to describe the results of runtime analysis - i.e we say that insertion sort best case runtime is O(n) and worst case runtime is O(n^2). 
 
 ## Exercises 1
 
@@ -130,6 +146,18 @@ def f(n):
 ```
 Solution: The inner loop gets run n times, but each time the number of steps in the inner loop increases, from 0 to n. So the total number of steps is 0 + 1 + ... + n. The sum is (n^2 + n) / 2, which is O(n^2). You find the proof for sum of arithmetic series online. 
 
+Example 3 from [Computational Complexity: Section 1 by misof](https://web.archive.org/web/20170224221329/https://www.topcoder.com/community/data-science/data-science-tutorials/computational-complexity-section-1/)  
+Give the time complexity of the following algorithm:
+```cpp
+int j=0;
+for (int i=0; i<N; i++) {
+  while ( (j<N-1) && (A[i]-A[j] > D) )
+    j++;
+  if (A[i]-A[j] == D) return 1;
+}
+```
+Solution: The outer loop executes N times. The while loop will, the first time it's run, increment j to N-1. After that, the value of j will be stuck on N-1 forever. So the next iteration of the outer for loop, the while loop will fail the condition check. Thus j is incremented exactly N-1 times. So overall the algorithm is O(N). 
+
 Question 3.12h from Data Structures & Algorithm Analysis 3rd Edition by Clifford A. Shaffer 
 What's the time complexity of f? Assume array A contains a random permutation of the values from 0 to n-1.
 ```python
@@ -154,6 +182,21 @@ def h(n)
     else run n^3 steps
 ```
 Solution: There are 2 cases: n is even or odd. If n is even then g(n) runs n^4 steps and h(n) runs n^2 steps so it's O(n^4). If n is odd then g(n) runs n^2 times but h(n) runs n^3 steps so it's O(n^3). Therefore best case is O(n^3) and worst case is O(n^4). We say that the steps g(n) and h(n) in f(n) are **incommensurate**: neither is larger than the other, nor are they equal. 
+
+Example from [Algorithms_Measuring_Algorithms_Perfromance_01.cpp By Eng Mostafa Saad](https://www.dropbox.com/s/mtacipbdxezvudp/Algorithms_Measuring_Algorithms_Perfromance_01.cpp):
+```cpp
+void what_is_my_tight_Order()	// ?
+{
+	for (int i = 0; i < n; ++i) {
+		int cnt = 0;
+		for (int j = i; j < n && arr[i] == arr[j]; ++j) {
+			cnt++;
+		}
+		i = i + cnt - 1;
+	}
+}
+```
+Solution: Notice that on each iteration of the outer for loop, the number of times that the inner for loop ran is recorded in the cnt variable, which is then added to the value of i, causing it to "skip" exactly that many iterations. Thus the sum of the number of iterations of the inner and outer for loops is just N, so the function is overall O(N). 
 
 # [Empirical "analysis"](http://cs.lmu.edu/~ray/notes/alganalysis/)
 
