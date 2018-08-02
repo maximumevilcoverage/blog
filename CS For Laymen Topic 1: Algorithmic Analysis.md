@@ -647,10 +647,10 @@ Top level: Only 1 node (problem). Work done: f(n) = n^d.
 ith level: Each node has a children, so on the ith level there are a^i nodes. On each level the amount of work is divided by b, so the amount of work done in each node on the ith level is f(n/b^i) = (n/b^i)^d, so the total amount of work done on the ith level is a^i * (n/b^i)^d. 
 
 To get the last level l we solve for 1 = n/b^l, since on the last level the size of each problem is 1:
-
+```
 b^l = n
 l = logb(n)
-
+```
 So the last level is the logb(n)th level. The number of nodes on this level is a^logb(n) and each node does O(1) work (since input is size 1) so total amount of work done on this level is just a^logb(n) = n^logb(a) by the log identity. 
 
 Adding the amount of work on each level, we obtain the following sum for total time complexity:
@@ -658,32 +658,32 @@ Adding the amount of work on each level, we obtain the following sum for total t
 a * (n/b)^d + a^2 * (n/b^2)^d + ... + a^logb(n) * (n/b^logb(n))^d
 
 Can we apply what we know about the geometric series to this expression? In order to do that, we need to convert the terms to the form of cr^i - the terms of a geometric series - so that we can apply what we know about geometric series to our series as well:
-
+```
 a^i * (n / b^i)^d
 = a^i * n^d / b^id
 = n^d * (a / b^d)^i
-
+```
 So now we have our terms in the form cr^i:
-
+```
 c = n^d
 r = a / b^d
-
+```
 We therefore have:
-
+```
 a = b^d => r = 1 => logb(a) = d
 a > b^d => r > 1 => logb(a) > d
-a `<` b^d => r `<` 1 => logb(a) `<` d
-
+a < b^d => r < 1 => logb(a) < d
+```
 And the geometric sum is:
 
 n^d * (a / b^d) + n^d * (a / b^d)^2 + ... + n^d * (a / b^d)^logb(n)
 
 Note that there are logb(n) terms NOT n, so we also need to substitute n = logb(n) when we can apply the formula for the order of growth of geometric sums to our sum:
-
+```
 Case 1. r = 1. O(nc). Substitute and we get O(logb(n) * n^d) = O(n^d log n). 
 Case 2. r > 1. O(cr^n). Substitute and obtain O(n^d * (a / b^d) ^ logb(n)). 
-Case 3. r `<` 1. O(c). Substitute and obtain O(n^d). 
-
+Case 3. r < 1. O(c). Substitute and obtain O(n^d). 
+```
 And thus we obtain the master theorem. 
 
 ### Examples of how to use the master theorem
@@ -695,12 +695,12 @@ The recurrence relation for binary search is:
 T(n) = T(n/2) + O(1)
 
 Apply the formula:
-
+```
 aT(n/b) + n^d
 a = 1 
 b = 2
 d = 0
-
+```
 Since d = logb(a) the time complexity is O(n^d log n) = O(1 log n) = O(log n)
 
 #### Mergesort, maximum subarray, and FFT
@@ -710,12 +710,12 @@ The recurrence relation for mergesort, maximum subarray, and fast fourier transf
 T(n) = 2T(n/2) + O(n)
 
 Apply the formula:
-
+```
 aT(n/b) + n^d
 a = 2
 b = 2
 d = 1
-
+```
 Since d = logb(a) the time complexity is O(n^d log n) = O(n log n)
 
 #### Fast heap construction
@@ -725,12 +725,12 @@ The recurrence relation for fast heap construction is:
 T(n) = 2T(n/2) + O(log n)
 
 Apply the formula:
-
+```
 aT(n/b) + n^d
 a = 2
 b = 2
 d = 0 Note that log n is greater than O(1) but smaller than O(n^d) for any d > 0. 
-
+```
 Since d `<` logb(a) the time complexity is O(n^(logb(a))) = O(n^log2(2)) = O(n)
 
 #### Stooge sort
@@ -740,12 +740,12 @@ The recurrence relation for stooge sort is:
 T(n) = 3T(2n/3) + 1
 
 Apply the formula:
-
+```
 aT(n/b) + n^d
 a = 3
 b = 3/2
 d = 0
-
+```
 Since d `<` logb(a) the time complexity is O(n^(logb(a))) = O(n^log1.5(3)) ~= O(n^2.7095)
 
 #### Karatsuba multiplication
@@ -755,12 +755,12 @@ The recurrence relation for Karatsuba multiplication is:
 T(n) = 3T(n/2) + O(n)
 
 Apply the formula:
-
+```
 aT(n/b) + n^d
 a = 3
 b = 2
 d = 1
-
+```
 Since d `<` logb(a) the time complexity is O(n^(logb(a))) = O(n^log2(3)) ~= O(n^1.585)
 
 #### Strassen's multiplication
@@ -770,12 +770,12 @@ The recurrence relation for Strassen's multiplication is:
 T(n) = 7T(n/2) + O(n^2)
 
 Apply the formula:
-
+```
 aT(n/b) + n^d
 a = 7
 b = 2
 d = 2
-
+```
 Since d `<` logb(a) the time complexity is O(n^(logb(a))) = O(n^log2(7)) ~= O(n^2.807)
 
 #### Max-heapify
@@ -785,12 +785,12 @@ The recurrence relation for max-heapify is:
 T(2n/3) + 1
 
 Apply the formula:
-
+```
 aT(n/b) + n^d
 a = 1
 b = 3/2
 d = 0
-
+```
 Since d = logb(a) the time complexity is O(n^d log n) = O(1 log n) = O(log n)
 
 #### Examples from CLRS3
@@ -798,45 +798,45 @@ Since d = logb(a) the time complexity is O(n^d log n) = O(1 log n) = O(log n)
 Example 1. 9T(n/3) + n
 
 Apply the formula:
-
+```
 aT(n/b) + n^d
 a = 9
 b = 3
 d = 1
-
+```
 Since d `<` logb(a) the time complexity is O(n^(logb(a))) = O(n^2)
 
 Example 3. 3T(n/4) + n log n
 
 Apply the formula:
-
+```
 aT(n/b) + n^d
 a = 3
 b = 4
 d = 1 Note that n log n is greater than O(n) but smaller than O(n^d) for any d > 1. 
-
+```
 Since d > logb(a) the time complexity is O(n^d). It's bigger than O(n) but smaller than (n^d) for any d > 1. Actually it's O(n log n) because in such cases it's just O(f(n)) - this is from the master theorem proved in CLRS but proving that version is less convenient than this version. 
 
 Example 4. 2T(n/2) + n log n
 
 Apply the formula:
-
+```
 aT(n/b) + n^d
 a = 2
 b = 2
 d = 1 Note that n log n is greater than O(n) but smaller than O(n^d) for any d > 1. 
-
+```
 Note that the time complexity of n log n when expressed in terms of O(n^d), the d value cannot be greater than 1, but at the same time n log n is not O(n) either. So d is neither equal to 1 nor is it greater. So we actually can't solve this using the master theorem. 
 
 Example 5. 2T(n/2) + O(n)
 
 Apply the formula:
-
+```
 aT(n/b) + n^d
 a = 2
 b = 2
 d = 1
-
+```
 Since d = logb(a) the time complexity is O(n^d log n) = O(n log n)
 
 #### CLRS2 Exercise 4.5-1
@@ -844,34 +844,34 @@ Since d = logb(a) the time complexity is O(n^d log n) = O(n log n)
 a. 2T(n/4) + 1
 
 Apply the formula:
-
+```
 aT(n/b) + n^d
 a = 2
 b = 4
 d = 0
-
+```
 Since d `<` logb(a) the time complexity is O(n^(logb(a))) = O(n^0.5)
 
 b. 2T(n/4) + n^0.5
 
 Apply the formula:
-
+```
 aT(n/b) + n^0.5
 a = 2
 b = 4
 d = 0.5
-
+```
 Since d = logb(a) the time complexity is O(n^d log n) = O(n^0.5 log n)
 
 c. 2T(n/4) + n
 
 Apply the formula:
-
+```
 aT(n/b) + n^d
 a = 2
 b = 4
 d = 1
-
+```
 Since d > logb(a) the time complexity is O(n^d) = O(n)
 
 #### More examples
@@ -881,25 +881,25 @@ Example 11.9 from Algorithm Design and Applications:
 2T(n^0.5) + log n
 
 Solve using substitution:
-
+```
 T(n) = T(2^k) = 2T(2^0.5k) + k
 S(k) = T(2^k)
 S(k) = 2S(0.5k) + k
 S(k) is O(k log k)
 T(n) is O(log n log log n)
-
+```
 Example from CLRS:
 
 T(n) = 2T(n^0.25) + O(1)
 
 Solve using substitution:
-
+```
 T(n) = T(2^k) = 2T(2^0.25k) + O(1)
 S(k) = T(2^k)
 S(k) = 2S(k/4) + O(1)
 S(k) is O(k^log4(2)) = O(k^0.5)
 T(n) is O((log n)^0.5)
-
+```
 
 
 
