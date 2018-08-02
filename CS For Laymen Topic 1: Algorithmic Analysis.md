@@ -15,7 +15,22 @@ About this series: This nontechnical tutorial series is intended for people who 
     - [Exercises 2](#exercises-2)
 - [Amortized runtime analysis](#amortized-runtime-analysis)
     - [Exercises 3](#exercises-3)
+- [Lower bounds](#lower-bounds)
 - [Recursive algorithms](#recursive-algorithms)
+    - [Order of growth of geometric sums](#order-of-growth-of-geometric-sums)
+    - [The master theorem](#the-master-theorem)
+        - [Examples of how to use the master theorem](#examples-of-how-to-use-the-master-theorem)
+            - [Binary search](#binary-search)
+            - [Mergesort, maximum subarray, and FFT](#mergesort-maximum-subarray-and-fft)
+            - [Fast heap construction](#fast-heap-construction)
+            - [Stooge sort](#stooge-sort)
+            - [Karatsuba multiplication](#karatsuba-multiplication)
+            - [Strassen's multiplication](#strassens-multiplication)
+            - [Max-heapify](#max-heapify)
+            - [Examples from CLRS3](#examples-from-clrs3)
+            - [CLRS2 Exercise 4.5-1](#clrs2-exercise-45-1)
+            - [More examples](#more-examples)
+    - [[Not done yet]](#not-done-yet)
 
 
 # Introduction
@@ -26,7 +41,7 @@ This tutorial only shows very basic applications of the methods introduced here.
 
 # A word of thanks
 
-The first thing they teach you in any decent CS 101 class is that just about every interesting property of computer programs is uncomputable due to the halting problem (if you can't even determine if a program will ever halt, clearly you can't compute its time complexity) - thanks Turing!
+The first thing they teach you in any decent CS 101 class is that just about every interesting property of computer programs is uncomputable due to the halting problem (if you can't even determine if a program will ever halt, clearly you can't compute its time complexity), thus guaranteeing [full employment](https://en.wikipedia.org/wiki/Full_employment_theorem) for computer scientists and mathematicians - thanks Turing!
 
 # What is algorithmic analysis? 
 
@@ -64,7 +79,9 @@ Here's a brief list of terms in descending order of dominance, where c is a cons
 7. log n
 8. log log n
 9. log* n (iterated log)
-10. c
+10. inverse ackerman's function
+11. 1
+12. c^n (for 0 < c < 1)
 
 If you plot these on a graph then you can see the asymptotic dominance hierarchy visually. 
 
@@ -82,6 +99,11 @@ We have the results (for the proofs see KT page 39):
 - O(f) * O(g) = O(f*g)
 
 Note that if there are multiple variables, e.g some algorithms take multiple parameters, then in the general case (unless you have special knowledge) you need to keep all the variables - you only drop the non-dominant terms for each variable. For example, f(A,B) = A^2 + A + B^2 + B is O(A^2 + B^2), but if you know that B is always smaller than A then you can simplify that to O(A^2). 
+
+In practice we most frequently use the following rules (from wikipedia):
+
+1. If f(x) is a sum of several terms, if there is one with largest growth rate, it can be kept, and all others omitted.
+2. If f(x) is a product of several factors, any constants (terms in the product that do not depend on x) can be omitted.
 
 For competitive programming tasks you are normally given the input range, and that will suggest the maximum time complexity of the algorithm [you can use (since the time limit is only a few seconds)](https://web.archive.org/web/20170224221329/https://www.topcoder.com/community/data-science/data-science-tutorials/computational-complexity-section-1/):
 ```
@@ -105,6 +127,24 @@ Question: Do the functions f = log (n ^ (log 2)) and g = log (2 ^ (log n)) have 
 
 Solution: Yes because log a^b = b log a. So f = log 2 log n and g = log n log 2. They're the same. 
 
+Question: Arrange the following terms in order of growth: [source](https://www.geeksforgeeks.org/practice-set-recurrence-relations/)
+
+f1(n) = n^√n
+f2(n) = 2^n
+f3(n) = (1.000001)^n
+f4(n) = n^(10)*2^(n/2)
+
+Solution: 
+
+2^(n/2) = (2^0.5)^n ~= 1.414^n
+So we have: f4 > f3
+2^n = 2^(n/2)*2^(n/2)
+So we have: f2 > f4
+log (n^√n) = n^0.5 * log n
+log (1.000001^n) = n log 1.000001 > n^0.5 * n^0.5 
+So we have: f3 > f1
+Putting it all together: f2 > f4 > f3 > f1
+
 # Best case, average case, and worst case analysis
 
 Observe that the runtime of an algorithm depends not only on the **size** of the input but also on the **content** of the input (e.g is it sorted or not). This is where the ideas of best case, average case, and worst case analysis come in handy. For example, quicksort takes O(n log n) in the best case and O(n^2) in the worst case (when the input is sorted). Compare with insertion sort which has best case O(n) (when the input is sorted). 
@@ -117,7 +157,7 @@ def f(n):
 ```
 Here the best case time complexity is O(n^2) and worst case is O(n^4). 
 
-The ideas of Big O, Big Theta, and Big Omega are orthogonal to the ideas of best case, average case, and worst case analysis. Big O is used to describe the results of runtime analysis - i.e we say that insertion sort best case runtime is O(n) and worst case runtime is O(n^2). However, it would also be correct to just say that insertion sort is O(n^2) since that is true for both best and worst case. So if an algorithm has different best and worst case time complexities you can still use just one Big Oh to describe it (the asymptotic time complexity of the algorithm in the worst case) but you can't use one Big Theta to describe its running time since its Big Thetas would be different for best and worst case inputs. Thus when people say an algorithm is O(x) that usually means its the worst case Big Theta is x - otherwise they would have clarified whether they're talking about the best or worst or average case and use Big Theta notation instead. 
+The ideas of Big O, Big Theta, and Big Omega are orthogonal to the ideas of best case, average case, and worst case analysis. Big O is used to describe the results of runtime analysis - i.e we say that insertion sort best case runtime is O(n) and worst case runtime is O(n^2). According to Cormen it would also be correct to just say that insertion sort is O(n^2) since that is true for both best and worst case. So if an algorithm has different best and worst case time complexities you can still use just one Big Oh to describe it (the asymptotic time complexity of the algorithm in the worst case) but you can't use one Big Theta to describe its running time since its Big Thetas would be different for best and worst case inputs. Thus when people say an algorithm is O(x) that usually means its the worst case Big Theta is x - otherwise they would have clarified whether they're talking about the best or worst or average case and use Big Theta notation instead. However you can't say something like: "O-notation gives us an upper limit of the execution time i.e. the execution time in the worst case" which is WRONG! O-notation just gives you the asymptotic growth rate of a function, whether or not it refers to worst case time complexity depends completely on context! 
 
 Usually we care about average case (to get representative idea of the algorithm's performance) and worst case (e.g for safety critical systems, and when the distribution over the inputs may not be known). Best case is usually pretty useless since it's fairly easy to check if the input is best case and just return something trivial. Sometimes the worst case is not reflective of how the algorithm performs on a typical real life input, for example the simplex algorithm is exponential worst case but in practice is polynomial. 
 
@@ -538,14 +578,348 @@ Clearly, the worst case for a call to increment flips all the bits (if all the b
 
 Note that this analysis only works when you only increment the counter. If you decrement the counter as well then it is trivial to ensure that you always trigger the worst case O(k) repeatedly by incrementing 111..1 to 100..0 and then decrementing it, repeatedly. In that case the amortized cost of both the increment operation and the decrement operation are just the same as the worst case: O(k). 
 
+# Lower bounds
+
+In order to answer the question of whether an algorithm's asymptotic time complexity is "optimal", we have to first ask "what is the best possible time complexity for any algorithm for this problem?". Thus we want to prove a lower bound for the problem itself, so that we know that an algorithm which hits this lower bound is optimal - there are no algorithms that can run faster (asymptotically). 
+
+An example is matrix multiplication. Any algorithm that multiplies 2 nxn matrices must at least look at every element in each matrix, thus a lower bound of O(n^2). It is not yet known if this lower bound is tight. 
+
+There is a proof that no comparison-based sort can do better than O(n log n). However it only applies to the most general case whe you have no additional information about the problem. If you know for example that all the elements are within a certain range then you can sometimes achieve O(n). 
+
 # Recursive algorithms 
 
-..to be done..
+There are many ways to solve recurrence relations, such as iteration, telescoping, and recursion tree. 
+
+## Order of growth of geometric sums
+
+The sum of a geometric series c + cr + cr^2 + ... + cr^(n-1) is given by the expression:
+
+c * (1 - r^n) / (1 - r)
+
+When r != 1. 
+
+When r = 1, then r^1, r^2 ... all equals 1, so the series is just c + c + c + ... + c, so the sum of that is just nc. The order of growth is also just O(nc).
+
+For r != 1 we will prove the order of growth algebraically. 
+
+c * (1 - r^n) / (1 - r) = c * (r^n - 1) / (r - 1)
+
+Now there are 2 cases:
+
+1. r > 1
+
+In this case, since r > 1, r - 1 is a positive constant so we can multiply by it. This is fine because we don't care about constant factors in asymptotic analysis. 
+```
+c * (r^n - 1) / (r - 1) * (r - 1)
+= c * (r^n - 1) 
+= cr ^ n - c
+```
+Since r^n gets bigger as n grows, cr^n dominates c so it's O(cr^n). 
+
+2. r `<` 1
+
+In this case, r `<` 1 so 1 - r is a positive constant so we can multiply by it. 
+```
+c * (1 - r^n) / (1 - r) * (1 - r)
+= c * (1 - r^n)
+= c - cr^n
+```
+Since r^n gets smaller as n grows, c dominates cr^n so it's just O(c). 
+
+## The master theorem
+
+The master theorem is derived from the recursion tree method and can only be used to solve recurrence relations which are of a specific form, mainly divide-and-conquer recurrences.
+
+Thm. if T(n) = aT(n/b) + O(n^d) for a > 0, b > 1, d >= 0 then the time complexity is
+
+1. O(n^d log n) if d = logb(a)
+2. O(n^d) if d > logb(a) 
+3. O(n^(logb(a))) if d `<` logb(a)
+
+Note that the master theorem ONLY applies when the recurrence can be written that way, so you cannot use the master theorem to solve the Fibonacci recurrence for example. 
+
+Proof. There are 2 parts to this proof, found in CLRS3 4.6 (page 97). The first part of the proof assumes that n is a power of b, and the 2nd part (the smoothness rule) extends the first part of the proof for all values of n. All of the important intuition for understanding the master theorem is found in the 1st part, the 2nd part is just for handling floors and ceilings. 
+
+Draw the recursion tree for T(n) = aT(n/b) + f(n):
+
+Top level: Only 1 node (problem). Work done: f(n) = n^d. 
+2nd level: There are a nodes (problems), each term doing f(n/b) work, so overall a * f(n/b) = a * (n/b)^d work. 
+ith level: Each node has a children, so on the ith level there are a^i nodes. On each level the amount of work is divided by b, so the amount of work done in each node on the ith level is f(n/b^i) = (n/b^i)^d, so the total amount of work done on the ith level is a^i * (n/b^i)^d. 
+
+To get the last level l we solve for 1 = n/b^l, since on the last level the size of each problem is 1:
+
+b^l = n
+l = logb(n)
+
+So the last level is the logb(n)th level. The number of nodes on this level is a^logb(n) and each node does O(1) work (since input is size 1) so total amount of work done on this level is just a^logb(n) = n^logb(a) by the log identity. 
+
+Adding the amount of work on each level, we obtain the following sum for total time complexity:
+
+a * (n/b)^d + a^2 * (n/b^2)^d + ... + a^logb(n) * (n/b^logb(n))^d
+
+Can we apply what we know about the geometric series to this expression? In order to do that, we need to convert the terms to the form of cr^i - the terms of a geometric series - so that we can apply what we know about geometric series to our series as well:
+
+a^i * (n / b^i)^d
+= a^i * n^d / b^id
+= n^d * (a / b^d)^i
+
+So now we have our terms in the form cr^i:
+
+c = n^d
+r = a / b^d
+
+We therefore have:
+
+a = b^d => r = 1 => logb(a) = d
+a > b^d => r > 1 => logb(a) > d
+a `<` b^d => r `<` 1 => logb(a) `<` d
+
+And the geometric sum is:
+
+n^d * (a / b^d) + n^d * (a / b^d)^2 + ... + n^d * (a / b^d)^logb(n)
+
+Note that there are logb(n) terms NOT n, so we also need to substitute n = logb(n) when we can apply the formula for the order of growth of geometric sums to our sum:
+
+Case 1. r = 1. O(nc). Substitute and we get O(logb(n) * n^d) = O(n^d log n). 
+Case 2. r > 1. O(cr^n). Substitute and obtain O(n^d * (a / b^d) ^ logb(n)). 
+Case 3. r `<` 1. O(c). Substitute and obtain O(n^d). 
+
+And thus we obtain the master theorem. 
+
+### Examples of how to use the master theorem
+
+#### Binary search
+
+The recurrence relation for binary search is:
+
+T(n) = T(n/2) + O(1)
+
+Apply the formula:
+
+aT(n/b) + n^d
+a = 1 
+b = 2
+d = 0
+
+Since d = logb(a) the time complexity is O(n^d log n) = O(1 log n) = O(log n)
+
+#### Mergesort, maximum subarray, and FFT
+
+The recurrence relation for mergesort, maximum subarray, and fast fourier transform is:
+
+T(n) = 2T(n/2) + O(n)
+
+Apply the formula:
+
+aT(n/b) + n^d
+a = 2
+b = 2
+d = 1
+
+Since d = logb(a) the time complexity is O(n^d log n) = O(n log n)
+
+#### Fast heap construction
+
+The recurrence relation for fast heap construction is:
+
+T(n) = 2T(n/2) + O(log n)
+
+Apply the formula:
+
+aT(n/b) + n^d
+a = 2
+b = 2
+d = 0 Note that log n is greater than O(1) but smaller than O(n^d) for any d > 0. 
+
+Since d `<` logb(a) the time complexity is O(n^(logb(a))) = O(n^log2(2)) = O(n)
+
+#### Stooge sort
+
+The recurrence relation for stooge sort is:
+
+T(n) = 3T(2n/3) + 1
+
+Apply the formula:
+
+aT(n/b) + n^d
+a = 3
+b = 3/2
+d = 0
+
+Since d `<` logb(a) the time complexity is O(n^(logb(a))) = O(n^log1.5(3)) ~= O(n^2.7095)
+
+#### Karatsuba multiplication
+
+The recurrence relation for Karatsuba multiplication is:
+
+T(n) = 3T(n/2) + O(n)
+
+Apply the formula:
+
+aT(n/b) + n^d
+a = 3
+b = 2
+d = 1
+
+Since d `<` logb(a) the time complexity is O(n^(logb(a))) = O(n^log2(3)) ~= O(n^1.585)
+
+#### Strassen's multiplication
+
+The recurrence relation for Strassen's multiplication is:
+
+T(n) = 7T(n/2) + O(n^2)
+
+Apply the formula:
+
+aT(n/b) + n^d
+a = 7
+b = 2
+d = 2
+
+Since d `<` logb(a) the time complexity is O(n^(logb(a))) = O(n^log2(7)) ~= O(n^2.807)
+
+#### Max-heapify
+
+The recurrence relation for max-heapify is:
+
+T(2n/3) + 1
+
+Apply the formula:
+
+aT(n/b) + n^d
+a = 1
+b = 3/2
+d = 0
+
+Since d = logb(a) the time complexity is O(n^d log n) = O(1 log n) = O(log n)
+
+#### Examples from CLRS3
+
+Example 1. 9T(n/3) + n
+
+Apply the formula:
+
+aT(n/b) + n^d
+a = 9
+b = 3
+d = 1
+
+Since d `<` logb(a) the time complexity is O(n^(logb(a))) = O(n^2)
+
+Example 3. 3T(n/4) + n log n
+
+Apply the formula:
+
+aT(n/b) + n^d
+a = 3
+b = 4
+d = 1 Note that n log n is greater than O(n) but smaller than O(n^d) for any d > 1. 
+
+Since d > logb(a) the time complexity is O(n^d). It's bigger than O(n) but smaller than (n^d) for any d > 1. Actually it's O(n log n) because in such cases it's just O(f(n)) - this is from the master theorem proved in CLRS but proving that version is less convenient than this version. 
+
+Example 4. 2T(n/2) + n log n
+
+Apply the formula:
+
+aT(n/b) + n^d
+a = 2
+b = 2
+d = 1 Note that n log n is greater than O(n) but smaller than O(n^d) for any d > 1. 
+
+Note that the time complexity of n log n when expressed in terms of O(n^d), the d value cannot be greater than 1, but at the same time n log n is not O(n) either. So d is neither equal to 1 nor is it greater. So we actually can't solve this using the master theorem. 
+
+Example 5. 2T(n/2) + O(n)
+
+Apply the formula:
+
+aT(n/b) + n^d
+a = 2
+b = 2
+d = 1
+
+Since d = logb(a) the time complexity is O(n^d log n) = O(n log n)
+
+#### CLRS2 Exercise 4.5-1
+
+a. 2T(n/4) + 1
+
+Apply the formula:
+
+aT(n/b) + n^d
+a = 2
+b = 4
+d = 0
+
+Since d `<` logb(a) the time complexity is O(n^(logb(a))) = O(n^0.5)
+
+b. 2T(n/4) + n^0.5
+
+Apply the formula:
+
+aT(n/b) + n^0.5
+a = 2
+b = 4
+d = 0.5
+
+Since d = logb(a) the time complexity is O(n^d log n) = O(n^0.5 log n)
+
+c. 2T(n/4) + n
+
+Apply the formula:
+
+aT(n/b) + n^d
+a = 2
+b = 4
+d = 1
+
+Since d > logb(a) the time complexity is O(n^d) = O(n)
+
+#### More examples
+
+Example 11.9 from Algorithm Design and Applications:
+
+2T(n^0.5) + log n
+
+Solve using substitution:
+
+T(n) = T(2^k) = 2T(2^0.5k) + k
+S(k) = T(2^k)
+S(k) = 2S(0.5k) + k
+S(k) is O(k log k)
+T(n) is O(log n log log n)
+
+Example from CLRS:
+
+T(n) = 2T(n^0.25) + O(1)
+
+Solve using substitution:
+
+T(n) = T(2^k) = 2T(2^0.25k) + O(1)
+S(k) = T(2^k)
+S(k) = 2S(k/4) + O(1)
+S(k) is O(k^log4(2)) = O(k^0.5)
+T(n) is O((log n)^0.5)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## [Not done yet]
 
 The following recurrence relations:
 T(n) = T(n-1) + T(n-1)
 T(n) = T(n-1) + T(n-2)  //Fibonacci
-
+ 
 
 CTCI Example 15:  
 What is the runtime of this algorithm:
