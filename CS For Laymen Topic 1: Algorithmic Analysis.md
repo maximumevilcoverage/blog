@@ -28,7 +28,7 @@ About this series: This nontechnical tutorial series is intended for people who 
             - [Strassen's multiplication](#strassens-multiplication)
             - [Max-heapify](#max-heapify)
             - [Examples from CLRS3](#examples-from-clrs3)
-            - [CLRS2 Exercise 4.5-1](#clrs2-exercise-45-1)
+            - [CLRS Exercise 4.5-1](#clrs-exercise-45-1)
             - [More examples](#more-examples)
     - [[Not done yet]](#not-done-yet)
 
@@ -839,7 +839,7 @@ d = 1
 ```
 Since d = logb(a) the time complexity is O(n^d log n) = O(n log n)
 
-#### CLRS2 Exercise 4.5-1
+#### CLRS Exercise 4.5-1
 
 a. 2T(n/4) + 1
 
