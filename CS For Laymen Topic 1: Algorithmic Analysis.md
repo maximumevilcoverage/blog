@@ -47,7 +47,7 @@ The first thing they teach you in any decent CS 101 class is that just about eve
 
 Determining the cost (mainly time and space complexity) of algorithms. 
 
-Algorithmic analysis is largely an art. As mentioned earlier there is no general method to determine the time and space complexity of an arbitrary program (because it's uncomputable). For example I could write a program to compute Collatz conjecture and you'd have to solve that conjecture in order to determine the program's time complexity. All we have is a handful of methods that apply to a very small class of programs. Most of the time we can't apply these methods and have to proceed on a case-by-case basis. See also: [full employment theorem](https://en.wikipedia.org/wiki/Full_employment_theorem). 
+Algorithmic analysis is largely an art. As mentioned earlier there is no general method to determine the time and space complexity of an arbitrary program (because it's uncomputable). For example I could write a program to compute Collatz conjecture and you'd have to solve that conjecture in order to determine the program's time complexity. All we have is a handful of methods that apply to a very small class of programs. Most of the time we can't apply these methods and have to proceed on a case-by-case basis. 
 
 # Motivation
 
