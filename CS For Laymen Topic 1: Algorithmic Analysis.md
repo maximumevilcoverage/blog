@@ -141,7 +141,7 @@ So we have: f4 > f3
 2^n = 2^(n/2)*2^(n/2)
 So we have: f2 > f4
 log (n^√n) = n^0.5 * log n
-log (1.000001^n) = n log 1.000001 > n^0.5 * n^0.5 
+log (1.000001^n) = n log 1.000001 = n^0.5 * n^0.5 
 So we have: f3 > f1
 Putting it all together: f2 > f4 > f3 > f1
 ```
