@@ -127,6 +127,10 @@ Question: Do the functions f = log (n ^ (log 2)) and g = log (2 ^ (log n)) have 
 
 Solution: Yes because log a^b = b log a. So f = log 2 log n and g = log n log 2. They're the same. 
 
+Question: Do the functions f = log n and g = log n^0.5 have the same asymptotic growth rate?
+
+Solution: Yes because log n^0.5 = 0.5 log b = O(log n). 
+
 Question: Arrange the following terms in order of growth: [source](https://www.geeksforgeeks.org/practice-set-recurrence-relations/)
 ```
 f1(n) = n^√n
