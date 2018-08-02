@@ -128,14 +128,14 @@ Question: Do the functions f = log (n ^ (log 2)) and g = log (2 ^ (log n)) have 
 Solution: Yes because log a^b = b log a. So f = log 2 log n and g = log n log 2. They're the same. 
 
 Question: Arrange the following terms in order of growth: [source](https://www.geeksforgeeks.org/practice-set-recurrence-relations/)
-
+```
 f1(n) = n^√n
 f2(n) = 2^n
 f3(n) = (1.000001)^n
 f4(n) = n^(10)*2^(n/2)
-
+```
 Solution: 
-
+```
 2^(n/2) = (2^0.5)^n ~= 1.414^n
 So we have: f4 > f3
 2^n = 2^(n/2)*2^(n/2)
@@ -144,7 +144,7 @@ log (n^√n) = n^0.5 * log n
 log (1.000001^n) = n log 1.000001 > n^0.5 * n^0.5 
 So we have: f3 > f1
 Putting it all together: f2 > f4 > f3 > f1
-
+```
 # Best case, average case, and worst case analysis
 
 Observe that the runtime of an algorithm depends not only on the **size** of the input but also on the **content** of the input (e.g is it sorted or not). This is where the ideas of best case, average case, and worst case analysis come in handy. For example, quicksort takes O(n log n) in the best case and O(n^2) in the worst case (when the input is sorted). Compare with insertion sort which has best case O(n) (when the input is sorted). 
