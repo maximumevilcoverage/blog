@@ -8,7 +8,7 @@ Table of contents:
 - [The utility of learning science](#the-utility-of-learning-science)
 - [The utility of arguing with cranks](#the-utility-of-arguing-with-cranks)
 - [Trust the expert consensus](#trust-the-expert-consensus)
-- [There is no general "correctness factor" / Expertise is domain specific](#there-is-no-general-%22correctness-factor%22--expertise-is-domain-specific)
+- [There is no general "correctness factor" / Expertise is domain specific](#there-is-no-general-correctness-factor--expertise-is-domain-specific)
 - [Beware of epiphanies and big ideas](#beware-of-epiphanies-and-big-ideas)
 - [Expected value, Risk aversion and Pascal's wager](#expected-value-risk-aversion-and-pascals-wager)
 - [If your results are highly counterintuitive, they are almost certainly wrong.](#if-your-results-are-highly-counterintuitive-they-are-almost-certainly-wrong)
